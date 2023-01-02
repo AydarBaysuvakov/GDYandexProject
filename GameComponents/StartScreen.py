@@ -13,6 +13,13 @@ class Start_Screen(Window):
 
     def __init__(self, screen):
         super().__init__(screen, SIZE, 'fon.jpg')
+        self.text_surface = pygame.sprite.Group()
+        self.buttons = pygame.sprite.Group()
+        top = self.text_coord_top + 60
+        for line in self.Button_text:
+            top += 10
+            Button(self.buttons, (self.text_coord_left, top), line)
+            top += 50
 
     def lines(self):
         top = self.text_coord_top
@@ -26,18 +33,11 @@ class Start_Screen(Window):
             self.screen.blit(string_rendered, intro_rect)
 
     def show(self):
-        self.lines()
-        buttons = pygame.sprite.Group()
-        top = self.text_coord_top + 60
-        for line in self.Button_text:
-            top += 10
-            Button(buttons, (self.text_coord_left, top), line)
-            top += 50
-
         clock = pygame.time.Clock()
-        prsd_anim_time, last_pressed_pos = 0, (0, 0)
-        running = True
-        while running:
+        self.lines()
+        # 0.prsd_anim_time, 1.last_pressed_pos, 2.prsd_btn(running)
+        self.params = [0, (0, 0), False]
+        while not self.params[2]:
             self.screen.blit(self.background, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -46,11 +46,11 @@ class Start_Screen(Window):
                     if event.key == pygame.K_KP_ENTER:
                         print('enter')
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    prsd_anim_time, last_pressed_pos = 10, event.pos
-                buttons.update(event, (prsd_anim_time, last_pressed_pos))
-            prsd_anim_time = max(prsd_anim_time - 1, -1)
+                    self.params = [10, event.pos] + [self.params[2]]
+                self.buttons.update(event, self.params)
+            self.params[0] = max(self.params[0] - 1, -1)
             self.lines()
-            buttons.draw(self.screen)
+            self.buttons.draw(self.screen)
             pygame.display.flip()
             clock.tick(FPS)
         pygame.quit()

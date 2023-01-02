@@ -3,6 +3,7 @@ import sys
 from .Imageloading import load_image
 
 FPS = 50
+TITLE = 'Mario Game'
 SIZE = WIDTH, HEIGHT = 500, 500
 
 def terminate():

@@ -1,2 +1,3 @@
-from .Imageloading import *
-from .StartScreen import *
+from .StartScreen import Start_Screen
+from .GameWindow import Game_Window
+from .Window import SIZE
