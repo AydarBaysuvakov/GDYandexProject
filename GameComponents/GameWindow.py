@@ -31,9 +31,13 @@ class Game_Window(Window):
                     if event.key == 1073741904:
                         self.player.walk(-1)
                     if event.key == 1073741906:
-                        self.player.up(self, -1)
+                        if pygame.sprite.spritecollideany(self.player, self.stairs):
+                            self.player.up(-1)
+                        else:
+                            self.player.jump()
                     if event.key == 1073741905:
-                        self.player.up(self, 1)
+                        if pygame.sprite.spritecollideany(self.player, self.stairs):
+                            self.player.up(1)
             self.screen.blit(self.background, (0, 0))
             self.player.update(self)
             self.all_sprites.draw(self.screen)

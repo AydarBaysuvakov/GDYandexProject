@@ -17,6 +17,8 @@ class Character(Object):
     def walk(self, direction):
         self.rect = self.rect.move(self.CHARACTER_SPEED * direction, 0)
 
-    def up(self, window, direction):
-        if pygame.sprite.spritecollideany(self, window.stairs):
-            self.rect = self.rect.move(0, self.CHARACTER_SPEED * direction)
+    def up(self, direction):
+        self.rect = self.rect.move(0, self.CHARACTER_SPEED * direction)
+
+    def jump(self):
+        self.rect = self.rect.move(0, -self.CHARACTER_SPEED)
