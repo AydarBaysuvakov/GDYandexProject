@@ -7,12 +7,12 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption(TITLE)
     Start_Window = Start_Screen(screen)
+    Game_window = Game_Window(screen)
     running = True
     while running:
-        print('now_here')
         last_pressed_button = Start_Window.show()
         if last_pressed_button == "Начать игру":
-            pass
+            Game_window.show()
         elif last_pressed_button == "Выбрать уровень":
             pass
         elif last_pressed_button == "Правила":

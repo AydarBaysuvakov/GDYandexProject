@@ -3,16 +3,20 @@ from .Object import Object
 
 class Character(Object):
     CHARACTER_SPEED = 10
+    mario_image = 'mar.png'
     def __init__(self, group, pos):
-        super().__init__(group, 'mar.pnj')
+        super().__init__(group, self.mario_image)
         self.rect.top = pos[1]
         self.rect.left = pos[0]
 
-    def update(self):
-        pass
+    def update(self, window):
+        if not pygame.sprite.spritecollideany(self, window.stairs) and \
+                not pygame.sprite.spritecollideany(self, window.platforms):
+            self.rect = self.rect.move(0, 1)
 
     def walk(self, direction):
-        self.rect = self.rect.move(direction * self.CHARACTER_SPEED, 0)
+        self.rect = self.rect.move(self.CHARACTER_SPEED * direction, 0)
 
-    def jump(self):
-        pass
+    def up(self, window, direction):
+        if pygame.sprite.spritecollideany(self, window.stairs):
+            self.rect = self.rect.move(0, self.CHARACTER_SPEED * direction)
