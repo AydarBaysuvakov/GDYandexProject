@@ -1,6 +1,7 @@
 import pygame
 import sys
 from .Imageloading import load_image
+from .Button import Button
 
 FPS = 50
 TITLE = 'Mario Game'
@@ -19,6 +20,30 @@ class Window:
             self.background = pygame.display.set_mode(size)
             self.background.fill(pygame.color.Color('cyan'))
         self.screen.blit(self.background, (0, 0))
+
+    def make_lines(self, text):
+        size = self.font.render(max(text, key=len), 1, pygame.Color('white')).get_rect()
+        size.h *= len(text)
+        text_surface = pygame.Surface((size.w, size.h)).convert()
+        text_surface.set_colorkey(pygame.color.Color('black'))
+        top, left = 0, 0
+        for line in text:
+            string_rendered = self.font.render(line, 1, pygame.Color('white'))
+            intro_rect = string_rendered.get_rect()
+            intro_rect.top = top
+            intro_rect.x = left
+            top += intro_rect.height
+            text_surface.blit(string_rendered, intro_rect)
+        return text_surface
+
+    def make_buttons(self, text, pos):
+        buttons = pygame.sprite.Group()
+        top = 0
+        for line in text:
+            top += 10
+            Button(buttons, (pos[0], pos[1] + top), line)
+            top += 50
+        return buttons
 
     def show(self):
         clock = pygame.time.Clock()

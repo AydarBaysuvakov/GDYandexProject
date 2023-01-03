@@ -4,16 +4,16 @@ from GameComponents.StartScreen import Start_Screen
 from GameComponents.GameWindow import Game_Window
 
 if __name__ == '__main__':
-    print('now_here')
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption(TITLE)
     Start_Window = Start_Screen(screen)
     running = True
     while running:
-        Start_Window.show()
-        if Start_Window.params[2] == "Правила":
+        print('now_here')
+        last_pressed_button = Start_Window.show()
+        if last_pressed_button == "Начать игру":
             pass
-        elif Start_Window.params[2] == "Выбрать уровень":
+        elif last_pressed_button == "Выбрать уровень":
             pass
-        elif Start_Window.params[2] == "Начать игру":
+        elif last_pressed_button == "Правила":
             pass

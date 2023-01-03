@@ -17,11 +17,9 @@ class Button(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
-                self.rect.collidepoint(args[0].pos) or \
-                args[-1][0] > 0 and self.rect.collidepoint(args[-1][1]):
+                self.rect.collidepoint(args[0].pos):
+            return self.text
             self.image = self.btn_prsd_img.copy()
-            '''if args[-1][0] == 5:
-                args[-1][2] = self.text'''
         elif args and args[0].type == pygame.MOUSEMOTION and \
                 self.rect.collidepoint(args[0].pos):
             self.image = self.btn_hover_img.copy()
