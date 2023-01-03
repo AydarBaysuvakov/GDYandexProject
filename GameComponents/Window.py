@@ -14,11 +14,16 @@ def terminate():
 class Window:
     def __init__(self, screen, size=SIZE, background_fn=None):
         self.screen = screen
-        if background_fn:
-            self.background = pygame.transform.scale(load_image(background_fn), size)
-        else:
+        if background_fn is None:
             self.background = pygame.Surface(self.screen.get_size())
             self.background.fill(pygame.color.Color('cyan'))
+        elif background_fn[0] == 'Image':
+            self.background = pygame.transform.scale(load_image(background_fn[1]), size)
+        elif background_fn[0] == 'Animation':
+            self.background = pygame.transform.scale(load_image(background_fn[1]), size)
+        elif background_fn[0] == 'Color':
+            self.background = pygame.Surface(self.screen.get_size())
+            self.background.fill(pygame.color.Color(background_fn[1]))
         self.screen.blit(self.background, (0, 0))
 
     def make_lines(self, text):

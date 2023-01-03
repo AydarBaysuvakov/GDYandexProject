@@ -11,7 +11,7 @@ class Start_Screen(Window):
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):
-        super().__init__(screen, SIZE, 'fon.jpg')
+        super().__init__(screen, SIZE, ('Image', 'fon.jpg'))
         self.Lable = self.make_lines(self.intro_text)
         self.buttons = self.make_buttons(self.Button_text, (self.text_coord_left,
                                                             self.text_coord_top + self.Lable.get_size()[1]))
