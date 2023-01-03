@@ -2,6 +2,7 @@ import pygame
 from .Window import Window, FPS, terminate
 from .Character import Character
 from .Object import Stair, Box
+from .Camera import Camera
 
 class Game_Window(Window):
     def __init__(self, screen, level):
@@ -16,6 +17,7 @@ class Game_Window(Window):
         clock = pygame.time.Clock()
         self.player = None
         self.generate_level()
+        self.camera = Camera()
         running = True
         while running:
             for event in pygame.event.get():
@@ -35,6 +37,9 @@ class Game_Window(Window):
             self.screen.blit(self.background, (0, 0))
             self.player.update(self)
             self.all_sprites.draw(self.screen)
+            self.camera.update(self.player)
+            for sprite in self.all_sprites:
+                self.camera.apply(sprite)
             clock.tick(FPS)
             pygame.display.flip()
         pygame.quit()
@@ -43,10 +48,10 @@ class Game_Window(Window):
         self.size = self.level['Map_size']
         for item, value in self.level.items():
             if item == 'Player':
-                self.player = Character(self.all_sprites, value[:2])
+                self.player = Character(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':
                 for pos in value:
-                    Box([self.all_sprites, self.platforms], pos[:2])
+                    Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
             if item == 'Stairs':
                 for pos in value:
-                    Stair([self.all_sprites, self.stairs], pos[:2])
+                    Stair([self.all_sprites, self.stairs], (pos[0], -pos[1]))
