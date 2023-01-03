@@ -33,7 +33,7 @@ class Game_Window(Window):
                     if event.key == 1073741906:
                         if pygame.sprite.spritecollideany(self.player, self.stairs):
                             self.player.up(-1)
-                        else:
+                        elif pygame.sprite.spritecollideany(self.player, self.platforms):
                             self.player.jump()
                     if event.key == 1073741905:
                         if pygame.sprite.spritecollideany(self.player, self.stairs):
