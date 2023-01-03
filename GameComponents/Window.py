@@ -17,7 +17,7 @@ class Window:
         if background_fn:
             self.background = pygame.transform.scale(load_image(background_fn), size)
         else:
-            self.background = pygame.display.set_mode(size)
+            self.background = pygame.Surface(self.screen.get_size())
             self.background.fill(pygame.color.Color('cyan'))
         self.screen.blit(self.background, (0, 0))
 

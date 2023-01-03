@@ -1,7 +1,7 @@
 import pygame
 from .Window import Window, FPS, terminate
 from .Character import Character
-from .Object import Stair, Platform
+from .Object import Stair, Box
 
 class Game_Window(Window):
     def __init__(self, screen):
@@ -26,7 +26,7 @@ class Game_Window(Window):
                     if event.button == 1 and ctrldown:
                         Stair((self.all_sprites, self.stairs), event.pos)
                     elif event.button == 1:
-                        Platform((self.all_sprites, self.platforms), event.pos)
+                        Box((self.all_sprites, self.platforms), event.pos)
                 if event.type == pygame.KEYDOWN:
                     if event.key == 1073741903:
                         man.walk(1)
@@ -41,8 +41,8 @@ class Game_Window(Window):
                 if event.type == pygame.KEYUP:
                     if event.key in (1073742048, 1073742052):
                         ctrldown = False
-            self.all_sprites.update(self)
-            self.screen.fill(pygame.Color('black'))
+            self.screen.blit(self.background, (0, 0))
+            man.update(self)
             self.all_sprites.draw(self.screen)
             clock.tick(FPS)
             pygame.display.flip()

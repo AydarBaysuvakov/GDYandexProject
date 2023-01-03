@@ -20,7 +20,6 @@ class Start_Screen(Window):
         clock = pygame.time.Clock()
         running = True
         while running:
-            self.screen.blit(self.background, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
@@ -30,6 +29,7 @@ class Start_Screen(Window):
                     last_pressed_button = button.update(event)
                     if last_pressed_button:
                         return last_pressed_button
+            self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
             self.buttons.draw(self.screen)
             pygame.display.flip()
