@@ -2,6 +2,7 @@ import pygame
 from .Window import Window, FPS, terminate
 from .Character import Character
 from .Object import Stair, Box
+from .Levelloading import load_level
 
 class Game_Window(Window):
     def __init__(self, screen):
@@ -12,8 +13,7 @@ class Game_Window(Window):
         self.platforms = pygame.sprite.Group()
         self.stairs = pygame.sprite.Group()
         clock = pygame.time.Clock()
-        man = Character(self.all_sprites, (-100, -100))
-        ctrldown = False
+        player = None
         running = True
         while running:
             for event in pygame.event.get():
@@ -47,3 +47,10 @@ class Game_Window(Window):
             clock.tick(FPS)
             pygame.display.flip()
         pygame.quit()
+
+    def generate_level(self, level):
+        size = right, top, left = level['Map_size']
+        for item, value in level.items():
+            if item == 'Player':
+                player = ''
+        return player, size
