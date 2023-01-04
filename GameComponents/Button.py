@@ -14,11 +14,16 @@ class Button(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = coords
         self.text = text
         self.text_write()
+        self.pressed = 0
 
     def update(self, *args):
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and \
-                self.rect.collidepoint(args[0].pos):
+        if self.pressed == 2:
             return self.text
+        elif 0 < self.pressed < 2:
+            self.pressed += 1
+        elif args and args[0].type == pygame.MOUSEBUTTONDOWN and \
+                self.rect.collidepoint(args[0].pos):
+            self.pressed += 1
             self.image = self.btn_prsd_img.copy()
         elif args and args[0].type == pygame.MOUSEMOTION and \
                 self.rect.collidepoint(args[0].pos):
