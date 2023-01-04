@@ -1,5 +1,5 @@
 import pygame
-from .Imageloading import load_image
+from .LoadComponents import load_image
 
 class Button(pygame.sprite.Sprite):
     btn_img = load_image("red_button_normal.png")

@@ -1,7 +1,7 @@
 import pygame
 from .Window import Window, FPS, terminate
 from .Character import Character
-from .Object import Stair, Box
+from .Walls import Stair, Box
 from .Camera import Camera
 
 class Game_Window(Window):

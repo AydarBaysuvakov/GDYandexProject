@@ -1,0 +1,5 @@
+Background / Color / red
+Map_size / -500, 500, 500
+Player / -10, 50
+Box / -50, 0 / 0, 0 / 50, 0
+Stairs / 50, 50 / -50, 80

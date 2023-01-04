@@ -1,6 +1,6 @@
 import pygame
 import sys
-from .Imageloading import load_image
+from .LoadComponents import load_image
 from .Button import Button
 
 FPS = 50
