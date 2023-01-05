@@ -5,6 +5,7 @@ from .Button import RedButton, ReturnButton
 from .Character import Character
 from .Walls import Stair, Box
 from .Camera import Camera
+from .LineEdit import LineEdit
 
 FPS = 50
 TITLE = 'Mario Game'
@@ -76,7 +77,7 @@ class StartScreen(Window):
     intro_text = ["SUPER MARIO BROS", ' ']
     Button_text = ["Начать игру",
                    "Выбрать уровень",
-                   "Правила"]
+                   "Правила", 'For Rushan']
     text_coord_top = 50
     text_coord_left = 140
     font = pygame.font.Font(None, 30)
@@ -247,3 +248,30 @@ class GameWindow(Window):
             if item == 'Stairs':
                 for pos in value:
                     Stair([self.all_sprites, self.stairs], (pos[0], -pos[1]))
+
+class Settings(Window):
+    def __init__(self, screen):
+        super().__init__(screen, SIZE, ('Image', 'fon.jpg'))
+        self.buttons = pygame.sprite.Group()
+        self.lineedits = pygame.sprite.Group()
+        for i in range(3):
+            self.lineEdit = LineEdit(self.buttons, (100, 50 + 50 * i))
+            self.lineEdit.add(self.lineedits)
+        self.backbtn = self.back_button(self.buttons)
+
+    def show(self):
+        clock = pygame.time.Clock()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    terminate()
+                for button in self.buttons:
+                    last_pressed_button = button.update(event, self)
+                    if last_pressed_button:
+                        return last_pressed_button
+            self.screen.blit(self.background, (0, 0))
+            self.buttons.draw(self.screen)
+            pygame.display.flip()
+            clock.tick(FPS)
+        pygame.quit()

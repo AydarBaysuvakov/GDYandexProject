@@ -1,5 +1,5 @@
 import pygame
-from GameComponents.Window import SIZE, TITLE, StartScreen, GameWindow, LevelChoise, Rules
+from GameComponents.Window import SIZE, TITLE, StartScreen, GameWindow, LevelChoise, Rules, Settings
 from GameComponents.LoadComponents import load_level
 
 if __name__ == '__main__':
@@ -24,3 +24,5 @@ if __name__ == '__main__':
                 Gamewindow.show()
         elif last_pressed_button == "Правила":
             rules.show()
+        elif last_pressed_button == 'For Rushan':
+            Settings(screen).show()
