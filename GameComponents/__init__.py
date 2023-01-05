@@ -1,3 +1,2 @@
-from .StartScreen import Start_Screen
-from .GameWindow import Game_Window
-from .Window import SIZE
+from GameComponents.Window import SIZE, TITLE, StartScreen, GameWindow, LevelChoise, Rules
+from GameComponents.LoadComponents import load_level
