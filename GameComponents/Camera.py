@@ -1,5 +1,4 @@
-from .Window import WIDTH, HEIGHT
-
+WIDTH, HEIGHT = 500, 500
 class Camera:
     def __init__(self):
         self.dx = 0
