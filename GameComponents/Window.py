@@ -1,7 +1,7 @@
 import pygame
 import sys
 from .LoadComponents import load_image
-from .Button import Button
+from .Button import RedButton, ReturnButton
 
 FPS = 50
 TITLE = 'Mario Game'
@@ -30,10 +30,11 @@ class Window:
         size = self.font.render(max(text, key=len), 1, pygame.Color('white')).get_rect()
         size.h *= len(text)
         text_surface = pygame.Surface((size.w, size.h)).convert()
-        text_surface.set_colorkey(pygame.color.Color('black'))
+        text_surface.fill('white')
+        text_surface.set_colorkey(pygame.color.Color('white'))
         top, left = 0, 0
         for line in text:
-            string_rendered = self.font.render(line, 1, pygame.Color('white'))
+            string_rendered = self.font.render(line, 1, pygame.Color('black'))
             intro_rect = string_rendered.get_rect()
             intro_rect.top = top
             intro_rect.x = left
@@ -46,13 +47,17 @@ class Window:
         top = 0
         for line in text:
             top += 10
-            Button(buttons, (pos[0], pos[1] + top), line)
+            RedButton(buttons, (pos[0], pos[1] + top), line)
             top += 50
         return buttons
+
+    def back_button(self, group):
+        return ReturnButton(group, (10, 10))
 
     def show(self):
         clock = pygame.time.Clock()
         running = True
+        last_pressed_button = None
         while running:
             self.screen.blit(self.background, (0, 0))
             for event in pygame.event.get():

@@ -9,15 +9,16 @@ class Game_Window(Window):
         self.level = level
         back = level['Background']
         super().__init__(screen, background_fn=back)
-
-    def show(self):
+        self.buttons = pygame.sprite.Group()
+        self.backbtn = self.back_button(self.buttons)
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
         self.stairs = pygame.sprite.Group()
-        clock = pygame.time.Clock()
-        self.player = None
-        self.generate_level()
         self.camera = Camera()
+        self.generate_level()
+
+    def show(self):
+        clock = pygame.time.Clock()
         running = True
         while running:
             for event in pygame.event.get():
@@ -25,6 +26,9 @@ class Game_Window(Window):
                     terminate()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pass
+                last_pressed_button = self.backbtn.update(event)
+                if last_pressed_button:
+                    return last_pressed_button
                 if event.type == pygame.KEYDOWN:
                     if event.key == 1073741903:
                         self.player.walk(1)
@@ -44,6 +48,7 @@ class Game_Window(Window):
             self.camera.update(self.player)
             for sprite in self.all_sprites:
                 self.camera.apply(sprite)
+            self.buttons.draw(self.screen)
             clock.tick(FPS)
             pygame.display.flip()
         pygame.quit()
