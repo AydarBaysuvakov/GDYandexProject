@@ -2,7 +2,7 @@ import pygame
 import sys
 from .LoadComponents import load_image
 from .Button import RedButton, ReturnButton
-from .Character import Character
+from .Character import Player
 from .Walls import Stair, Box
 from .Camera import Camera
 from .LineEdit import LineEdit
@@ -241,7 +241,7 @@ class GameWindow(Window):
         self.size = self.level['Map_size']
         for item, value in self.level.items():
             if item == 'Player':
-                self.player = Character(self.all_sprites, (value[0], -value[1]))
+                self.player = Player(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
