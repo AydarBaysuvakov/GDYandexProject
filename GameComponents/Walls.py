@@ -12,14 +12,7 @@ class Platform(pygame.sprite.Sprite):
 
 class Stair(Object):
     def __init__(self, group, pos):
-        super().__init__(group[0])
-        self.add(group[1])
-        self.image = pygame.transform.scale(load_image('ladderMid1.png'), (20, 50))
-        self.rect = self.image.get_rect()
-        self.rect.top = pos[1]
-        self.rect.left = pos[0]
-    def __init__(self, group, pos):
-        super().__init__(group[0], 'ladderMid1.png')
+        super().__init__(group[0], ('Image', 'ladderMid1.png'))
         self.add(group[1])
         self.image = pygame.transform.scale(self.image, (20, 50))
         self.rect = self.image.get_rect()
@@ -28,7 +21,7 @@ class Stair(Object):
 
 class Box(Object):
     def __init__(self, group, pos):
-        super().__init__(group[0], 'box.png')
+        super().__init__(group[0], ('Image', 'box.png'))
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]

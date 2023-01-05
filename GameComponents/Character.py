@@ -3,9 +3,8 @@ from .Object import Object
 
 class Character(Object):
     CHARACTER_SPEED = 10
-    mario_image = 'mar.png'
-    def __init__(self, group, pos):
-        super().__init__(group, self.mario_image)
+    def __init__(self, group, pos, image_name=None):
+        super().__init__(group, image_name)
         self.rect.top = pos[1]
         self.rect.left = pos[0]
 
@@ -22,3 +21,10 @@ class Character(Object):
 
     def jump(self):
         self.rect = self.rect.move(0, -self.CHARACTER_SPEED)
+
+class Player(Character):
+    mario_image = 'mar.png'
+    CHARACTER_SPEED = 10
+
+    def __init__(self, group, pos):
+        super().__init__(group, pos, ('Image', self.mario_image))
