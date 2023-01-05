@@ -200,29 +200,35 @@ class GameWindow(Window):
     def show(self):
         clock = pygame.time.Clock()
         running = True
-        pressed_buttons = []
+        pressed_buttons = {}
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                last_pressed_button = self.backbtn.update(event)
-                if last_pressed_button:
-                    return last_pressed_button
+                if self.backbtn.update(event):
+                    return 0
                 if event.type == pygame.KEYDOWN:
-                    pressed_buttons.append(event.key)
+                    pressed_buttons[event.key] = True
                 if event.type == pygame.KEYUP:
-                    pressed_buttons.clear()
-            for key in pressed_buttons:
-                if key == pygame.K_RIGHT:
-                    self.player.walk(1)
-                if key == pygame.K_LEFT:
-                    self.player.walk(-1)
-                if key == pygame.K_UP:
+                    pressed_buttons[event.key] = False
+            for key, value in pressed_buttons.items():
+                if pygame.sprite.spritecollideany(self.player, self.stairs) or \
+                        pygame.sprite.spritecollideany(self.player, self.platforms):
+                    if key == pygame.K_RIGHT and value:
+                        self.player.walk(1.2)
+                    if key == pygame.K_LEFT and value:
+                        self.player.walk(-1.2)
+                else:
+                    if key == pygame.K_RIGHT and value:
+                        self.player.walk(0.3)
+                    if key == pygame.K_LEFT and value:
+                        self.player.walk(-0.3)
+                if key == pygame.K_UP and value:
                     if pygame.sprite.spritecollideany(self.player, self.stairs):
                         self.player.up(-1)
                     elif pygame.sprite.spritecollideany(self.player, self.platforms):
                         self.player.jump()
-                if key == pygame.K_DOWN:
+                if key == pygame.K_DOWN and value:
                     if pygame.sprite.spritecollideany(self.player, self.stairs):
                         self.player.up(1)
             self.screen.blit(self.background, (0, 0))

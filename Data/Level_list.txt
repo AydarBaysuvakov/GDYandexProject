@@ -1,2 +1,3 @@
 Test level:test_level.txt
 First level:first_level.txt
+No Stairs:WithoutStairs.txt
