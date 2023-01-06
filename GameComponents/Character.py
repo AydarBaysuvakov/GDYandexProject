@@ -9,17 +9,14 @@ def sign(x):
     return 0
 
 class Character(Object):
-    G = -0.2
-    Ng = 0.8
-    Ns = 0.9
-    Vx = 0
-    Vy = 0
-    Vmax = 10
+    G, Ng, Ns = -0.2, 0.8, 0.9
+    Vx, Vy = 0, 0
+    Vmax = 9
 
     def __init__(self, group, pos, image_name=None):
         super().__init__(group, image_name)
-        self.rect.top = pos[1]
-        self.rect.left = pos[0]
+        self.rect.left, self.rect.top = pos
+
 
     def update(self, window):
         self.rect = self.rect.move(0, -1)
@@ -37,34 +34,39 @@ class Character(Object):
         self.Vy -= 7
 
     def falling(self, window):
-        d = sign(self.Vy)
-        self.rect = self.rect.move(0, int(abs(self.Vy)) * d)
+        dir, mod = sign(self.Vy), int(abs(self.Vy))
+        if mod > self.Vmax:
+            self.Vy = dir * self.Vmax
+            mod = self.Vmax
+        for i in range(mod):
+            self.rect = self.rect.move(0, dir)
+            if pygame.sprite.spritecollideany(self, window.platforms):
+                self.rect = self.rect.move(0, -dir)
+                self.Vy = 0
+                return 0
         if pygame.sprite.spritecollideany(self, window.stairs):
             self.Vy = 0
-        elif abs(self.Vy) > self.Vmax:
-            self.Vy = self.Vmax * d
         else:
             self.Vy -= self.G
-        while pygame.sprite.spritecollideany(self, window.platforms):
-            self.rect = self.rect.move(0, -d)
-            self.Vy = 0
 
     def running(self, window):
-        d = sign(self.Vx)
-        self.rect = self.rect.move(int(abs(self.Vx)) * d, 0)
-        if pygame.sprite.spritecollideany(self, window.stairs):
-            self.Vx = 0
-        elif abs(self.Vx) > self.Vmax:
-            self.Vx = self.Vmax * d
+        dir, mod = sign(self.Vx), int(abs(self.Vx))
+        if mod > self.Vmax:
+            self.Vx = dir * self.Vmax
+            mod = self.Vmax
+        for i in range(mod):
+            self.rect = self.rect.move(dir, 0)
+            if pygame.sprite.spritecollideany(self, window.platforms):
+                self.rect = self.rect.move(-dir, 0)
+                self.Vx = 0
+                return 0
         self.rect = self.rect.move(0, 1)
-        if pygame.sprite.spritecollideany(self, window.platforms):
+        if pygame.sprite.spritecollideany(self, window.platforms) or\
+                pygame.sprite.spritecollideany(self, window.stairs):
             self.Vx = self.Vx * self.Ng
         else:
             self.Vx = self.Vx * self.Ns
         self.rect = self.rect.move(0, -1)
-        while pygame.sprite.spritecollideany(self, window.platforms):
-            self.rect = self.rect.move(-d, 0)
-            self.Vx = 0
 
 class Player(Character):
     mario_image = 'mar.png'
