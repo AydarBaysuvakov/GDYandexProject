@@ -15,7 +15,7 @@ def terminate():
     sys.exit()
 
 class Window:
-    def __init__(self, screen, size=SIZE, background_fn=None):
+    def __init__(self, screen, size=SIZE, background_fn=None, coords=(0, 0)):
         self.screen = screen
         if background_fn is None:
             self.background = pygame.Surface(self.screen.get_size())
@@ -27,7 +27,7 @@ class Window:
         elif background_fn[0] == 'Color':
             self.background = pygame.Surface(self.screen.get_size())
             self.background.fill(pygame.color.Color(background_fn[1]))
-        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.background, coords)
 
     def make_lines(self, text):
         size = self.font.render(max(text, key=len), 1, pygame.Color('white')).get_rect()
@@ -45,17 +45,14 @@ class Window:
             text_surface.blit(string_rendered, intro_rect)
         return text_surface
 
-    def make_buttons(self, text, pos):
-        buttons = pygame.sprite.Group()
+    def make_buttons(self, group, text, pos):
         top = 0
         for line in text:
-            top += 10
-            RedButton(buttons, (pos[0], pos[1] + top), line)
-            top += 50
-        return buttons
+            RedButton(group, (pos[0], pos[1] + top), line)
+            top += 60
 
     def back_button(self, group):
-        return ReturnButton(group, (10, 10))
+        return ReturnButton(group, (8, 8))
 
     def show(self):
         clock = pygame.time.Clock()
@@ -66,8 +63,6 @@ class Window:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                elif event.type == pygame.KEYDOWN:
-                    pass
             pygame.display.flip()
             clock.tick(FPS)
         pygame.quit()
@@ -82,10 +77,11 @@ class StartScreen(Window):
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):
-        super().__init__(screen, SIZE, ('Image', 'fon.jpg'))
+        super().__init__(screen, background_fn=('Image', 'fon.jpg'))
         self.Lable = self.make_lines(self.intro_text)
-        self.buttons = self.make_buttons(self.Button_text, (self.text_coord_left,
-                                                            self.text_coord_top + self.Lable.get_size()[1]))
+        self.buttons = pygame.sprite.Group()
+        self.make_buttons(self.buttons, self.Button_text,
+                          (self.text_coord_left, self.text_coord_top + self.Lable.get_size()[1]))
 
     def show(self):
         clock = pygame.time.Clock()
@@ -94,8 +90,6 @@ class StartScreen(Window):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                elif event.type == pygame.KEYDOWN:
-                    pass
                 for button in self.buttons:
                     last_pressed_button = button.update(event)
                     if last_pressed_button:
@@ -114,11 +108,12 @@ class LevelChoise(Window):
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen, file):
-        super().__init__(screen, SIZE, ('Image', 'fon.jpg'))
+        super().__init__(screen, background_fn=('Image', 'fon.jpg'))
         self.Lable = self.make_lines(self.intro_text)
         self.levels = self.get_level_list(file)
-        self.buttons = self.make_buttons(self.levels.keys(), (self.text_coord_left,
-                                                            self.text_coord_top + self.Lable.get_size()[1]))
+        self.buttons = pygame.sprite.Group()
+        self.make_buttons(self.buttons, self.levels.keys(),
+                          (self.text_coord_left, self.text_coord_top + self.Lable.get_size()[1]))
         self.backbtn = self.back_button(self.buttons)
 
     def show(self):
@@ -128,15 +123,10 @@ class LevelChoise(Window):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                elif event.type == pygame.KEYDOWN:
-                    pass
                 for button in self.buttons:
                     last_pressed_button = button.update(event)
                     if last_pressed_button:
                         return last_pressed_button
-                last_pressed_button = self.backbtn.update(event)
-                if last_pressed_button:
-                    return last_pressed_button
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
             self.buttons.draw(self.screen)
@@ -172,8 +162,6 @@ class Rules(Window):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                elif event.type == pygame.KEYDOWN:
-                    pass
                 last_pressed_button = self.backbtn.update(event)
                 if last_pressed_button:
                     return last_pressed_button
@@ -186,7 +174,6 @@ class Rules(Window):
 
 class GameWindow(Window):
     def __init__(self, screen, level):
-        self.level = level
         back = level['Background']
         super().__init__(screen, background_fn=back)
         self.buttons = pygame.sprite.Group()
@@ -195,12 +182,12 @@ class GameWindow(Window):
         self.platforms = pygame.sprite.Group()
         self.stairs = pygame.sprite.Group()
         self.camera = Camera()
-        self.generate_level()
+        self.generate_level(level)
 
     def show(self):
         clock = pygame.time.Clock()
         running = True
-        pressed_buttons = {}
+        events = {}
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -208,31 +195,11 @@ class GameWindow(Window):
                 if self.backbtn.update(event):
                     return 0
                 if event.type == pygame.KEYDOWN:
-                    pressed_buttons[event.key] = True
+                    events[event.key] = True
                 if event.type == pygame.KEYUP:
-                    pressed_buttons[event.key] = False
-            for key, value in pressed_buttons.items():
-                if pygame.sprite.spritecollideany(self.player, self.stairs) or \
-                        pygame.sprite.spritecollideany(self.player, self.platforms):
-                    if key == pygame.K_RIGHT and value:
-                        self.player.walk(1.2)
-                    if key == pygame.K_LEFT and value:
-                        self.player.walk(-1.2)
-                else:
-                    if key == pygame.K_RIGHT and value:
-                        self.player.walk(0.3)
-                    if key == pygame.K_LEFT and value:
-                        self.player.walk(-0.3)
-                if key == pygame.K_UP and value:
-                    if pygame.sprite.spritecollideany(self.player, self.stairs):
-                        self.player.up(-1)
-                    elif pygame.sprite.spritecollideany(self.player, self.platforms):
-                        self.player.jump()
-                if key == pygame.K_DOWN and value:
-                    if pygame.sprite.spritecollideany(self.player, self.stairs):
-                        self.player.up(1)
+                    events[event.key] = False
+            self.player.get_event(events, self)
             self.screen.blit(self.background, (0, 0))
-            self.player.update(self)
             self.all_sprites.draw(self.screen)
             self.camera.update(self.player)
             for sprite in self.all_sprites:
@@ -242,9 +209,9 @@ class GameWindow(Window):
             pygame.display.flip()
         pygame.quit()
 
-    def generate_level(self):
-        self.size = self.level['Map_size']
-        for item, value in self.level.items():
+    def generate_level(self, level):
+        self.size = level['Map_size']
+        for item, value in level.items():
             if item == 'Player':
                 self.player = Player(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':

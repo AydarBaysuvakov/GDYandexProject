@@ -71,3 +71,26 @@ class Player(Character):
 
     def __init__(self, group, pos):
         super().__init__(group, pos, ('Image', self.mario_image))
+
+    def get_event(self, events, window):
+        for key, value in events.items():
+            if pygame.sprite.spritecollideany(self, window.stairs) or \
+                    pygame.sprite.spritecollideany(self, window.platforms):
+                if key == pygame.K_RIGHT and value:
+                    self.walk(1.2)
+                if key == pygame.K_LEFT and value:
+                    self.walk(-1.2)
+            else:
+                if key == pygame.K_RIGHT and value:
+                    self.walk(0.3)
+                if key == pygame.K_LEFT and value:
+                    self.walk(-0.3)
+            if key == pygame.K_UP and value:
+                if pygame.sprite.spritecollideany(self, window.stairs):
+                    self.up(-1)
+                elif pygame.sprite.spritecollideany(self, window.platforms):
+                    self.jump()
+            if key == pygame.K_DOWN and value:
+                if pygame.sprite.spritecollideany(self, window.stairs):
+                    self.up(1)
+        self.update(window)
