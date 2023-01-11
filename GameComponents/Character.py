@@ -1,5 +1,5 @@
 import pygame
-from .Object import Object
+from .Object import AnimatedObject
 
 def sign(x):
     if x > 0:
@@ -8,15 +8,14 @@ def sign(x):
         return -1
     return 0
 
-class Character(Object):
+class Character(AnimatedObject):
     G, Ng, Ns = -0.2, 0.8, 0.9
     Vx, Vy = 0, 0
     Vmax = 9
 
-    def __init__(self, group, pos, image_name=None):
-        super().__init__(group, image_name)
+    def __init__(self, group, pos, sheet, columns, rows):
+        super().__init__(group, sheet, columns, rows, *pos)
         self.rect.left, self.rect.top = pos
-
 
     def update(self, window):
         self.rect = self.rect.move(0, -1)
@@ -46,6 +45,8 @@ class Character(Object):
                 return 0
         if pygame.sprite.spritecollideany(self, window.stairs):
             self.Vy = 0
+        elif pygame.sprite.spritecollideany(self, window.water):
+            self.Vy = 1
         else:
             self.Vy -= self.G
 
@@ -63,16 +64,18 @@ class Character(Object):
         self.rect = self.rect.move(0, 1)
         if pygame.sprite.spritecollideany(self, window.platforms) or\
                 pygame.sprite.spritecollideany(self, window.stairs):
-            self.Vx = self.Vx * self.Ng
+            self.Vx *= self.Ng
+            self.change_frame(self.Vx)
         else:
-            self.Vx = self.Vx * self.Ns
+            self.Vx *= self.Ns
         self.rect = self.rect.move(0, -1)
 
 class Player(Character):
-    mario_image = 'mar.png'
+    mario_image = 'pers.jpg'
+    params = [8, 2]
 
     def __init__(self, group, pos):
-        super().__init__(group, pos, ('Image', self.mario_image))
+        super().__init__(group, pos, self.mario_image, *self.params)
 
     def get_event(self, events, window):
         for key, value in events.items():
@@ -88,11 +91,13 @@ class Player(Character):
                 if key == pygame.K_LEFT and value:
                     self.walk(-0.3)
             if key == pygame.K_UP and value:
-                if pygame.sprite.spritecollideany(self, window.stairs):
+                if pygame.sprite.spritecollideany(self, window.stairs) or \
+                        pygame.sprite.spritecollideany(self, window.water):
                     self.up(-1)
                 elif pygame.sprite.spritecollideany(self, window.platforms):
                     self.jump()
             if key == pygame.K_DOWN and value:
-                if pygame.sprite.spritecollideany(self, window.stairs):
+                if pygame.sprite.spritecollideany(self, window.stairs) or \
+                        pygame.sprite.spritecollideany(self, window.water):
                     self.up(1)
         self.update(window)

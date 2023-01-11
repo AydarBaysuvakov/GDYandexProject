@@ -3,7 +3,7 @@ import sys
 from .LoadComponents import load_image
 from .Button import RedButton, ReturnButton, RestartButton
 from .Character import Player
-from .Walls import Stair, Box, Ground, Wall
+from .Walls import Stair, Box, Ground, Wall, Water
 from .Camera import Camera
 
 FPS = 50
@@ -186,6 +186,7 @@ class GameWindow(Window):
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
         self.stairs = pygame.sprite.Group()
+        self.water = pygame.sprite.Group()
         self.camera = Camera()
         self.generate_level()
 
@@ -223,6 +224,9 @@ class GameWindow(Window):
         Wall([self.all_sprites, self.platforms], (self.size[0] - 300, -self.size[3]), (300, 1500))
         Wall([self.all_sprites, self.platforms], (self.size[2], -self.size[3]), (300, 1500))
         for item, value in self.level.items():
+            if item == 'Water':
+                for pos in value:
+                    Water([self.all_sprites, self.water], (pos[0], -pos[1]), (pos[2], pos[3]))
             if item == 'Player':
                 self.player = Player(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':
