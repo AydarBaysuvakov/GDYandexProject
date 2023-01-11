@@ -1,9 +1,9 @@
 import pygame
 import sys
 from .LoadComponents import load_image
-from .Button import RedButton, ReturnButton
+from .Button import RedButton, ReturnButton, RestartButton
 from .Character import Player
-from .Walls import Stair, Box
+from .Walls import Stair, Box, Ground, Wall
 from .Camera import Camera
 
 FPS = 50
@@ -178,11 +178,16 @@ class GameWindow(Window):
         super().__init__(screen, background_fn=back)
         self.buttons = pygame.sprite.Group()
         self.backbtn = self.back_button(self.buttons)
+        self.restart = RestartButton(self.buttons, (50, 8))
+        self.level = level
+        self.new_level()
+
+    def new_level(self):
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
         self.stairs = pygame.sprite.Group()
         self.camera = Camera()
-        self.generate_level(level)
+        self.generate_level()
 
     def show(self):
         clock = pygame.time.Clock()
@@ -194,6 +199,8 @@ class GameWindow(Window):
                     terminate()
                 if self.backbtn.update(event):
                     return 0
+                if self.restart.update(event):
+                    return 'restart'
                 if event.type == pygame.KEYDOWN:
                     events[event.key] = True
                 if event.type == pygame.KEYUP:
@@ -209,9 +216,13 @@ class GameWindow(Window):
             pygame.display.flip()
         pygame.quit()
 
-    def generate_level(self, level):
-        self.size = level['Map_size']
-        for item, value in level.items():
+    def generate_level(self):
+        self.size = self.level['Map_size']
+        Ground([self.all_sprites, self.platforms], (self.size[0], -self.size[1]),
+               (self.size[2] - self.size[0], 400))
+        Wall([self.all_sprites, self.platforms], (self.size[0] - 300, -self.size[3]), (300, 1500))
+        Wall([self.all_sprites, self.platforms], (self.size[2], -self.size[3]), (300, 1500))
+        for item, value in self.level.items():
             if item == 'Player':
                 self.player = Player(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':

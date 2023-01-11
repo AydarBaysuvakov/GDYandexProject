@@ -13,11 +13,14 @@ if __name__ == '__main__':
     while running:
         last_pressed_button = StartWindow.show()
         if last_pressed_button == "Начать игру":
-            Gamewindow.show()
+            last_pressed_button = Gamewindow.show()
         elif last_pressed_button == "Выбрать уровень":
             last_pressed_button = Levels.show()
             if last_pressed_button != 'back':
                 Gamewindow = GameWindow(screen, load_level(Levels.levels[last_pressed_button]))
-                Gamewindow.show()
+                last_pressed_button = Gamewindow.show()
         elif last_pressed_button == "Правила":
             rules.show()
+        while last_pressed_button == 'restart':
+            Gamewindow.new_level()
+            last_pressed_button = Gamewindow.show()

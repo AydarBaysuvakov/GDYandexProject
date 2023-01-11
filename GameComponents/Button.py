@@ -57,3 +57,8 @@ class ReturnButton(Button):
     im = pygame.transform.scale(load_image('back.png'), (35, 35))
     def __init__(self, group, coords=(0, 0)):
         super().__init__(group, self.im, coords, text='back')
+
+class RestartButton(Button):
+    im = pygame.transform.scale(load_image('star1.png'), (35, 35))
+    def __init__(self, group, coords=(0, 0)):
+        super().__init__(group, self.im, coords, text='restart')

@@ -1,6 +1,5 @@
 import pygame
 from .Object import Object
-from .LoadComponents import load_image
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, group, pos):
@@ -22,6 +21,20 @@ class Stair(Object):
 class Box(Object):
     def __init__(self, group, pos):
         super().__init__(group[0], ('Image', 'box.png'))
+        self.add(group[1])
+        self.rect.top = pos[1]
+        self.rect.left = pos[0]
+
+class Ground(Object):
+    def __init__(self, group, pos, size):
+        super().__init__(group[0], ('Image', 'grassMid.png'), size, take_size=True)
+        self.add(group[1])
+        self.rect.top = pos[1]
+        self.rect.left = pos[0]
+
+class Wall(Object):
+    def __init__(self, group, pos, size):
+        super().__init__(group[0], ('Image', 'sandCenter.png'), size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
