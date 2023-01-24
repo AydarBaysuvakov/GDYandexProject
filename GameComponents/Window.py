@@ -2,8 +2,8 @@ import pygame
 import sys
 from .LoadComponents import load_image
 from .Button import RedButton, ReturnButton, RestartButton
-from .Character import Player
-from .Walls import Box, Ground, Wall
+from .Character import Cube
+from .Object import Box, Ground, Wall
 from .Camera import Camera
 
 FPS = 50
@@ -214,7 +214,6 @@ class GameWindow(Window):
     def new_level(self):
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
-        self.stairs = pygame.sprite.Group()
         self.camera = Camera()
         self.generate_level()
 
@@ -253,7 +252,7 @@ class GameWindow(Window):
         Wall([self.all_sprites, self.platforms], (self.size[2], -self.size[3]), (300, 1500))
         for item, value in self.level.items():
             if item == 'Player':
-                self.player = Player(self.all_sprites, (value[0], -value[1]))
+                self.player = Cube(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
