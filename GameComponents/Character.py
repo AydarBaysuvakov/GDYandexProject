@@ -47,8 +47,11 @@ class Character(Object):
             if pygame.sprite.spritecollideany(self, window.platforms):
                 self.rect = self.rect.move(-dir, 0)
                 self.Vx = 0
-                return
-        self.Vx = 5
+            self.rect = self.rect.move(0, 1)
+            if not pygame.sprite.spritecollideany(self, window.platforms):
+                self.rect = self.rect.move(-dir, 0)
+                self.Vx = 5
+            self.rect = self.rect.move(0, -1)
 
 class Cube(Character):
     mario_image = 'cube.png'
