@@ -3,7 +3,7 @@ import sys
 from .LoadComponents import load_image
 from .Button import RedButton, ReturnButton, RestartButton
 from .Character import Player
-from .Walls import Stair, Box, Ground, Wall
+from .Walls import Box, Ground, Wall
 from .Camera import Camera
 
 FPS = 50
@@ -143,8 +143,37 @@ class LevelChoise(Window):
                 levels[name] = file
         return levels
 
-class Rules(Window):
-    intro_text = ["Правила", ' ', 'Ходить: <- ->', 'Прыгать: ^', 'На лестницу можно залезть']
+class Settings(Window):
+    intro_text = ["Soon"]
+    text_coord_top = 50
+    text_coord_left = 140
+    font = pygame.font.Font(None, 30)
+
+    def __init__(self, screen):
+        super().__init__(screen, SIZE, ('Image', 'fon.jpg'))
+        self.Lable = self.make_lines(self.intro_text)
+        self.buttons = pygame.sprite.Group()
+        self.backbtn = self.back_button(self.buttons)
+
+    def show(self):
+        clock = pygame.time.Clock()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    terminate()
+                last_pressed_button = self.backbtn.update(event)
+                if last_pressed_button:
+                    return last_pressed_button
+            self.screen.blit(self.background, (0, 0))
+            self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
+            self.buttons.draw(self.screen)
+            pygame.display.flip()
+            clock.tick(FPS)
+        pygame.quit()
+
+class Skins(Window):
+    intro_text = ["Soon"]
     text_coord_top = 50
     text_coord_left = 140
     font = pygame.font.Font(None, 30)
@@ -228,6 +257,3 @@ class GameWindow(Window):
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
-            if item == 'Stairs':
-                for pos in value:
-                    Stair([self.all_sprites, self.stairs], (pos[0], -pos[1]))

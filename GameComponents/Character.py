@@ -14,7 +14,7 @@ class Character(Object):
     Vmax = 9
 
     def __init__(self, group, pos, image_name=None):
-        super().__init__(group, image_name)
+        super().__init__(group, image_name, size=[50, 50], take_size=True, colorkey=-1)
         self.rect.left, self.rect.top = pos
 
 
@@ -69,7 +69,7 @@ class Character(Object):
         self.rect = self.rect.move(0, -1)
 
 class Player(Character):
-    mario_image = 'mar.png'
+    mario_image = 'cube.png'
 
     def __init__(self, group, pos):
         super().__init__(group, pos, ('Image', self.mario_image))
