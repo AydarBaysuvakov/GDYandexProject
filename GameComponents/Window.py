@@ -7,8 +7,8 @@ from .Walls import Stair, Box, Ground, Wall
 from .Camera import Camera
 
 FPS = 50
-TITLE = 'Mario Game'
-SIZE = WIDTH, HEIGHT = 500, 500
+TITLE = 'Geometry dash'
+SIZE = WIDTH, HEIGHT = 800, 500
 
 def terminate():
     pygame.quit()
@@ -68,12 +68,12 @@ class Window:
         pygame.quit()
 
 class StartScreen(Window):
-    intro_text = ["SUPER MARIO BROS", ' ']
-    Button_text = ["Начать игру",
-                   "Выбрать уровень",
-                   "Правила"]
+    intro_text = ["Geometry dash", ' ']
+    Button_text = ["Выбрать уровень",
+                   "Персонаж",
+                   "Настройки"]
     text_coord_top = 50
-    text_coord_left = 140
+    text_coord_left = 250
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):

@@ -3,7 +3,7 @@ import sys
 import pygame
 
 pygame.init()
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((800, 500))
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('Data', name)
