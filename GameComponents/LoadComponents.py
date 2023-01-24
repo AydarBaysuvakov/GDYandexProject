@@ -35,7 +35,5 @@ def load_level(filename):
             elif object_type == 'Player':
                 level['Player'] = list(map(int, params[0].split(', ')))
             else:
-                level[object_type] = []
-                for object in params:
-                    level[object_type].append(list(map(int, object.split(', '))))
+                level[object_type] = [[int(i) for i in p.split(', ')] for p in params]
     return level
