@@ -1,5 +1,6 @@
 import pygame
-from GameComponents.Window import SIZE, TITLE, StartScreen, GameWindow, LevelChoise, Settings, Skins
+from GameComponents.Window import SIZE, TITLE, StartScreen, LevelChoise, Settings, Skins
+from GameComponents.GameWindow import GameWindow
 from GameComponents.LoadComponents import load_level
 
 if __name__ == '__main__':
