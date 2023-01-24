@@ -9,13 +9,6 @@ class Platform(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, pygame.Color("white"), (0, 0, 50, 10))
         self.rect = pygame.Rect(pos[0], pos[1], 50, 10)
 
-class Stair(Object):
-    def __init__(self, group, pos):
-        super().__init__(group[0], ('Image', 'ladderMid1.png'), (20, 50), take_size=True)
-        self.add(group[1])
-        self.rect.top = pos[1]
-        self.rect.left = pos[0]
-
 class Box(Object):
     def __init__(self, group, pos):
         super().__init__(group[0], ('Image', 'box.png'))
@@ -33,13 +26,6 @@ class Ground(Object):
 class Wall(Object):
     def __init__(self, group, pos, size):
         super().__init__(group[0], ('Image', 'sandCenter.png'), size, take_size=True)
-        self.add(group[1])
-        self.rect.top = pos[1]
-        self.rect.left = pos[0]
-
-class Water(Object):
-    def __init__(self, group, pos, size):
-        super().__init__(group[0], ('Image', 'water.png'), size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]

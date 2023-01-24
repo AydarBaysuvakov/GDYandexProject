@@ -9,13 +9,13 @@ def sign(x):
     return 0
 
 class Object(pygame.sprite.Sprite):
-    def __init__(self, group, image_name=None, size=[10, 10], take_size=False):
+    def __init__(self, group, image_name=None, size=[10, 10], take_size=False, colorkey=None):
         super().__init__(group)
         if image_name is None:
             self.image = pygame.Surface(size)
             self.image.fill(pygame.color.Color('white'))
         elif image_name[0] == 'Image':
-            self.image = load_image(image_name[1])
+            self.image = load_image(image_name[1], colorkey=colorkey)
             if take_size:
                 self.image = pygame.transform.scale(self.image, size)
         elif image_name[0] == 'Color':
