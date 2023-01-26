@@ -49,8 +49,8 @@ class Character(Object):
                 self.Vx = 0
             self.rect = self.rect.move(0, 1)
             if not pygame.sprite.spritecollideany(self, window.platforms):
-                self.rect = self.rect.move(-dir, 0)
-                self.Vx = 5
+                if self.Vx < 5:
+                    self.Vx += 1
             self.rect = self.rect.move(0, -1)
 
 class Cube(Character):

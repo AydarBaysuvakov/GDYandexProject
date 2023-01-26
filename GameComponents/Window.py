@@ -54,7 +54,7 @@ class Window:
     def show(self):
         clock = pygame.time.Clock()
         running = True
-        last_pressed_button = None
+        last_event = None
         while running:
             self.screen.blit(self.background, (0, 0))
             for event in pygame.event.get():

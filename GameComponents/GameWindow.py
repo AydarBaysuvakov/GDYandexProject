@@ -8,8 +8,7 @@ from .LoadComponents import load_level
 
 class GameWindow(Window):
     def __init__(self, screen, level):
-        back = level['Background']
-        super().__init__(screen, background_fn=back)
+        super().__init__(screen, background_fn=level['Background'])
         self.buttons = pygame.sprite.Group()
         self.backbtn = self.back_button(self.buttons)
         self.restart = RestartButton(self.buttons, (50, 8))
@@ -31,13 +30,17 @@ class GameWindow(Window):
                 if event.type == pygame.QUIT:
                     terminate()
                 if self.backbtn.update(event):
-                    return 0
+                    return 'back'
                 if self.restart.update(event):
                     return 'restart'
                 if event.type == pygame.KEYDOWN:
                     events[event.key] = True
                 if event.type == pygame.KEYUP:
                     events[event.key] = False
+                '''if event.type == pygame.MOUSEBUTTONDOWN:
+                    events[event.key] = True
+                if event.type == pygame.MOUSEBUTTONUP:
+                    events[event.key] = False'''
             self.player.get_event(events, self)
             self.screen.blit(self.background, (0, 0))
             self.all_sprites.draw(self.screen)
@@ -51,10 +54,8 @@ class GameWindow(Window):
 
     def generate_level(self):
         self.size = self.level['Map_size']
-        Ground([self.all_sprites, self.platforms], (self.size[0], -self.size[1]),
-               (self.size[2] - self.size[0], 400))
-        Wall([self.all_sprites, self.platforms], (self.size[0] - 300, -self.size[3]), (300, 1500))
-        Wall([self.all_sprites, self.platforms], (self.size[2], -self.size[3]), (300, 1500))
+        Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
+        Wall([self.all_sprites, self.platforms], (self.size, -1000))
         for item, value in self.level.items():
             if item == 'Player':
                 self.player = Cube(self.all_sprites, (value[0], -value[1]))
@@ -74,16 +75,16 @@ class Game:
     def start(self):
         running = True
         while running:
-            last_pressed_button = self.StartWindow.show()
-            if last_pressed_button == "Выбрать уровень":
-                last_pressed_button = self.Levels.show()
-                if last_pressed_button != 'back':
-                    self.Gamewindow = GameWindow(self.screen, load_level(self.Levels.levels[last_pressed_button]))
-                    last_pressed_button = self.Gamewindow.show()
-            elif last_pressed_button == "Персонаж":
+            last_event = self.StartWindow.show()
+            if last_event == "Выбрать уровень":
+                last_event = self.Levels.show()
+                if last_event != 'back':
+                    self.Gamewindow = GameWindow(self.screen, load_level(self.Levels.levels[last_event]))
+                    last_event = self.Gamewindow.show()
+            elif last_event == "Персонаж":
                 self.skin.show()
-            elif last_pressed_button == "Настройки":
+            elif last_event == "Настройки":
                 self.setting.show()
-            while last_pressed_button == 'restart':
+            while last_event == 'restart':
                 self.Gamewindow.new_level()
-                last_pressed_button = self.Gamewindow.show()
+                last_event = self.Gamewindow.show()

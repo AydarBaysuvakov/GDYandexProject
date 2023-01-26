@@ -40,14 +40,14 @@ class Box(Object):
         self.rect.left = pos[0]
 
 class Ground(Object):
-    def __init__(self, group, pos, size):
+    def __init__(self, group, pos=(-500, 0), size=(2000, 500)):
         super().__init__(group[0], ('Image', 'grassMid.png'), size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
 
 class Wall(Object):
-    def __init__(self, group, pos, size):
+    def __init__(self, group, pos=(1500, -1000), size=(500, 1500)):
         super().__init__(group[0], ('Image', 'sandCenter.png'), size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
