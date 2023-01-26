@@ -1,9 +1,10 @@
 import pygame
-from .Window import Window, terminate, FPS
+from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
 from .Button import RestartButton
 from .Character import Cube
 from .Object import Box, Ground, Wall
 from .Camera import Camera
+from .LoadComponents import load_level
 
 class GameWindow(Window):
     def __init__(self, screen, level):
@@ -60,3 +61,29 @@ class GameWindow(Window):
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
+
+class Game:
+    def __init__(self):
+        self.screen = pygame.display.set_mode(SIZE)
+        pygame.display.set_caption(TITLE)
+        self.StartWindow = StartScreen(self.screen)
+        self.setting = Settings(self.screen)
+        self.skin = Skins(self.screen)
+        self.Levels = LevelChoise(self.screen, 'Level_list.txt')
+
+    def start(self):
+        running = True
+        while running:
+            last_pressed_button = self.StartWindow.show()
+            if last_pressed_button == "Выбрать уровень":
+                last_pressed_button = self.Levels.show()
+                if last_pressed_button != 'back':
+                    self.Gamewindow = GameWindow(self.screen, load_level(self.Levels.levels[last_pressed_button]))
+                    last_pressed_button = self.Gamewindow.show()
+            elif last_pressed_button == "Персонаж":
+                self.skin.show()
+            elif last_pressed_button == "Настройки":
+                self.setting.show()
+            while last_pressed_button == 'restart':
+                self.Gamewindow.new_level()
+                last_pressed_button = self.Gamewindow.show()
