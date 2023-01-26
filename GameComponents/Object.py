@@ -2,7 +2,7 @@ import pygame
 from .LoadComponents import load_image
 
 class Object(pygame.sprite.Sprite):
-    def __init__(self, group, image_name=None, size=[10, 10], take_size=False, colorkey=None):
+    def __init__(self, group, image_name=None, size=(10, 10), take_size=False, colorkey=None):
         super().__init__(group)
         if image_name is None:
             self.image = pygame.Surface(size)

@@ -88,9 +88,9 @@ class StartScreen(Window):
                 if event.type == pygame.QUIT:
                     terminate()
                 for button in self.buttons:
-                    last_pressed_button = button.update(event)
-                    if last_pressed_button:
-                        return last_pressed_button
+                    last_event = button.update(event)
+                    if last_event:
+                        return last_event
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
             self.buttons.draw(self.screen)
@@ -121,9 +121,9 @@ class LevelChoise(Window):
                 if event.type == pygame.QUIT:
                     terminate()
                 for button in self.buttons:
-                    last_pressed_button = button.update(event)
-                    if last_pressed_button:
-                        return last_pressed_button
+                    last_event = button.update(event)
+                    if last_event:
+                        return last_event
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
             self.buttons.draw(self.screen)
@@ -143,7 +143,7 @@ class LevelChoise(Window):
 class Settings(Window):
     intro_text = ["Soon"]
     text_coord_top = 50
-    text_coord_left = 140
+    text_coord_left = 380
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):
@@ -159,9 +159,9 @@ class Settings(Window):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                last_pressed_button = self.backbtn.update(event)
-                if last_pressed_button:
-                    return last_pressed_button
+                last_event = self.backbtn.update(event)
+                if last_event:
+                    return last_event
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
             self.buttons.draw(self.screen)
@@ -172,7 +172,7 @@ class Settings(Window):
 class Skins(Window):
     intro_text = ["Soon"]
     text_coord_top = 50
-    text_coord_left = 140
+    text_coord_left = 380
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):

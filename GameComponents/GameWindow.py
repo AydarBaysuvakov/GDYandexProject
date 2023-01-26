@@ -41,6 +41,8 @@ class GameWindow(Window):
                     events[event.key] = True
                 if event.type == pygame.MOUSEBUTTONUP:
                     events[event.key] = False'''
+            if self.player.event == 'restart':
+                return 'restart'
             self.player.get_event(events, self)
             self.screen.blit(self.background, (0, 0))
             self.all_sprites.draw(self.screen)
