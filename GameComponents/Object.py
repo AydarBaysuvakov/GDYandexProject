@@ -2,7 +2,7 @@ import pygame
 from .LoadComponents import load_image
 
 class Object(pygame.sprite.Sprite):
-    def __init__(self, group, image_name=None, size=(10, 10), take_size=False, colorkey=None):
+    def __init__(self, group, image_name=None, size=(10, 10), take_size=False, colorkey=None, form='rect'):
         super().__init__(group)
         if image_name is None:
             self.image = pygame.Surface(size)
@@ -15,7 +15,12 @@ class Object(pygame.sprite.Sprite):
             self.image = load_image(image_name[1])
         elif image_name[0] == 'Color':
             self.image = pygame.Surface(size)
-            self.image.fill(pygame.color.Color(image_name[1]))
+            if form == 'circle':
+                pygame.draw.circle(self.image, pygame.Color(image_name[1]),
+                                   (size[0] // 2, size[1] // 2), size[0] // 2)
+                self.image.set_colorkey(pygame.color.Color('black'))
+            else:
+                self.image.fill(pygame.color.Color(image_name[1]))
         self.rect = self.image.get_rect()
         if take_size:
             self.rect.w = size[0]
