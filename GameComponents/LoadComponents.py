@@ -33,7 +33,7 @@ def load_level(filename):
             if object_type == 'Map_size':
                 level['Map_size'] = int(*params)
             elif object_type == 'Player':
-                level['Player'] = list(map(int, params[0].split(', ')))
+                level['Player'] = list(map(int, params[0].split(', '))), params[1]
             else:
                 level[object_type] = [[int(i) for i in p.split(', ')] for p in params]
     return level
