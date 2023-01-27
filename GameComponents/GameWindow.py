@@ -1,7 +1,7 @@
 import pygame
 from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
 from .Button import RestartButton
-from .Character import Cube
+from .Character import Cube, Ufo, Ball, Ship
 from .Object import Box, Ground, Wall
 from .Camera import Camera
 from .LoadComponents import load_level
@@ -57,10 +57,11 @@ class GameWindow(Window):
     def generate_level(self):
         self.size = self.level['Map_size']
         Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
+        Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500), pos=(-500, -1000))
         Wall([self.all_sprites, self.platforms], (self.size, -1000))
         for item, value in self.level.items():
             if item == 'Player':
-                self.player = Cube(self.all_sprites, (value[0], -value[1]))
+                self.player = Ufo(self.all_sprites, (value[0], -value[1]))
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
