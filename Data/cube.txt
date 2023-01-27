@@ -1,4 +1,4 @@
-Background / Image / 20220531_103540.jpg
+Background / Image / Batyr.jpg
 Map_size / 2000
 Player / 10, 60 / Cube
 Box / 600, 50 / 800, 50 / 800, 100 / 1000, 50 / 1000, 100 / 1000, 150
