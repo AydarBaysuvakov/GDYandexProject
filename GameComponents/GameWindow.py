@@ -35,6 +35,10 @@ class GameWindow(Window):
                     return 'restart'
                 if event.type == pygame.KEYDOWN:
                     events[event.key] = True
+                    if event.key == pygame.K_ESCAPE:
+                        return 'back'
+                    if event.key == pygame.K_KP_0:
+                        return 'restart'
                 if event.type == pygame.KEYUP:
                     events[event.key] = False
                 '''if event.type == pygame.MOUSEBUTTONDOWN:

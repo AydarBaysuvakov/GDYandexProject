@@ -34,7 +34,7 @@ class Window:
         text_surface.set_colorkey(pygame.color.Color('white'))
         top, left = 0, 0
         for line in text:
-            string_rendered = self.font.render(line, 1, pygame.Color('black'))
+            string_rendered = self.font.render(line, 1, pygame.Color('yellow'))
             intro_rect = string_rendered.get_rect()
             intro_rect.top = top
             intro_rect.x = left
@@ -70,7 +70,7 @@ class StartScreen(Window):
                    "Персонаж",
                    "Настройки"]
     text_coord_top = 50
-    text_coord_left = 250
+    text_coord_left = 300
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):
@@ -101,7 +101,7 @@ class StartScreen(Window):
 class LevelChoise(Window):
     intro_text = ["Выберите уровень", ' ']
     text_coord_top = 50
-    text_coord_left = 140
+    text_coord_left = 300
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen, file):
