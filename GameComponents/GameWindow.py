@@ -61,7 +61,14 @@ class GameWindow(Window):
         Wall([self.all_sprites, self.platforms], (self.size, -1000))
         for item, value in self.level.items():
             if item == 'Player':
-                self.player = Ufo(self.all_sprites, (value[0], -value[1]))
+                if value[1] == 'Cube':
+                    self.player = Cube(self.all_sprites, (value[0][0], -value[0][1]))
+                if value[1] == 'Ball':
+                    self.player = Ball(self.all_sprites, (value[0][0], -value[0][1]))
+                if value[1] == 'Ship':
+                    self.player = Ship(self.all_sprites, (value[0][0], -value[0][1]))
+                if value[1] == 'Ufo':
+                    self.player = Ufo(self.all_sprites, (value[0][0], -value[0][1]))
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
