@@ -25,7 +25,7 @@ class Cube(Character):
 
     def get_event(self, events, window):
         for key, value in events.items():
-            if key in (pygame.K_UP, pygame.K_SPACE)  and value:
+            if key in (pygame.K_UP, pygame.K_SPACE, 1)  and value:
                 if pygame.sprite.spritecollideany(self, window.platforms):
                     self.jump()
         self.move(window)
@@ -66,10 +66,10 @@ class Ufo(Character):
 
     def get_event(self, events, window):
         for key, value in events.items():
-            if key in (pygame.K_UP, pygame.K_SPACE) and value and not self.hold:
+            if key in (pygame.K_UP, pygame.K_SPACE, 1) and value and not self.hold:
                 self.jump()
                 self.hold = True
-            if key in (pygame.K_UP, pygame.K_SPACE) and not value:
+            if key in (pygame.K_UP, pygame.K_SPACE, 1) and not value:
                 self.hold = False
         self.move(window)
 
@@ -109,7 +109,7 @@ class Ball(Character):
 
     def get_event(self, events, window):
         for key, value in events.items():
-            if key in (pygame.K_UP, pygame.K_SPACE) and value:
+            if key in (pygame.K_UP, pygame.K_SPACE, 1) and value:
                 if pygame.sprite.spritecollideany(self, window.platforms):
                     self.jump()
         self.move(window)
@@ -150,7 +150,7 @@ class Ship(Character):
 
     def get_event(self, events, window):
         for key, value in events.items():
-            if key in (pygame.K_UP, pygame.K_SPACE)  and value:
+            if key in (pygame.K_UP, pygame.K_SPACE, 1)  and value:
                 self.jump()
         self.move(window)
 

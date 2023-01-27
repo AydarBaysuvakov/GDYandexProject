@@ -41,10 +41,10 @@ class GameWindow(Window):
                         return 'restart'
                 if event.type == pygame.KEYUP:
                     events[event.key] = False
-                '''if event.type == pygame.MOUSEBUTTONDOWN:
-                    events[event.key] = True
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    events[event.button] = True
                 if event.type == pygame.MOUSEBUTTONUP:
-                    events[event.key] = False'''
+                    events[event.button] = False
             if self.player.event == 'restart':
                 return 'restart'
             self.player.get_event(events, self)
