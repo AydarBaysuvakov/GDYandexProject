@@ -45,9 +45,9 @@ class GameWindow(Window):
                     events[event.button] = True
                 if event.type == pygame.MOUSEBUTTONUP:
                     events[event.button] = False
+            self.player.get_event(events)
             if self.player.event == 'restart':
                 return 'restart'
-            self.player.get_event(events, self)
             self.screen.blit(self.background, (0, 0))
             self.all_sprites.draw(self.screen)
             self.camera.update(self.player)
@@ -66,13 +66,13 @@ class GameWindow(Window):
         for item, value in self.level.items():
             if item == 'Player':
                 if value[1] == 'Cube':
-                    self.player = Cube(self.all_sprites, (value[0][0], -value[0][1]))
+                    self.player = Cube(self.all_sprites, (value[0][0], -value[0][1]), self)
                 if value[1] == 'Ball':
-                    self.player = Ball(self.all_sprites, (value[0][0], -value[0][1]))
+                    self.player = Ball(self.all_sprites, (value[0][0], -value[0][1]), self)
                 if value[1] == 'Ship':
-                    self.player = Ship(self.all_sprites, (value[0][0], -value[0][1]))
+                    self.player = Ship(self.all_sprites, (value[0][0], -value[0][1]), self)
                 if value[1] == 'Ufo':
-                    self.player = Ufo(self.all_sprites, (value[0][0], -value[0][1]))
+                    self.player = Ufo(self.all_sprites, (value[0][0], -value[0][1]), self)
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
