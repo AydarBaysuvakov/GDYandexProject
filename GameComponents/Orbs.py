@@ -14,6 +14,7 @@ class Orb(Object):
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
+        self.active = False
 
 
 class JumpOrb(Orb):
@@ -21,7 +22,9 @@ class JumpOrb(Orb):
         super().__init__(group, pos, 'yellow')
 
     def action(self, player):
-        player.Vy = 7 * sign(player.G)
+        if not self.active:
+            player.Vy = 7 * sign(player.G)
+        self.active = True
 
 
 class GravityOrb(Orb):
@@ -29,16 +32,19 @@ class GravityOrb(Orb):
         super().__init__(group, pos, 'cyan')
 
     def action(self, player):
-        player.Vy = 3 * sign(player.G)
-        player.G *= -1
-
+        if not self.active:
+            player.Vy = 3 * sign(player.G)
+            player.G *= -1
+        self.active = True
 
 class SmallJumpOrb(Orb):
     def __init__(self, group, pos):
         super().__init__(group, pos, 'magenta')
 
     def action(self, player):
-        player.Vy = 6 * sign(player.G)
+        if not self.active:
+            player.Vy = 6 * sign(player.G)
+        self.active = True
 
 
 class BigJumpOrb(Orb):
@@ -46,7 +52,9 @@ class BigJumpOrb(Orb):
         super().__init__(group, pos, 'red')
 
     def action(self, player):
-        player.Vy = 8 * sign(player.G)
+        if not self.active:
+            player.Vy = 8 * sign(player.G)
+        self.active = True
 
 
 class ReverseOrb(Orb):
@@ -54,8 +62,10 @@ class ReverseOrb(Orb):
         super().__init__(group, pos, 'green')
 
     def action(self, player):
-        player.Vy = -7 * sign(player.G)
-        player.G *= -1
+        if not self.active:
+            player.Vy = -7 * sign(player.G)
+            player.G *= -1
+        self.active = True
 
 
 class PushOrb(Orb):
@@ -63,4 +73,6 @@ class PushOrb(Orb):
         super().__init__(group, pos, 'white')
 
     def action(self, player):
-        player.Vy = -10 * sign(player.G)
+        if not self.active:
+            player.Vy = -10 * sign(player.G)
+        self.active = True

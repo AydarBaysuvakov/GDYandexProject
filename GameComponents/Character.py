@@ -24,11 +24,9 @@ class Character(Object):
             if key in (pygame.K_UP, pygame.K_SPACE, 1) and value:
                 if not pygame.sprite.spritecollideany(self, self.window.orbs):
                     self.jump()
-                elif not self.hold:
-                    for orb in self.window.orbs:
-                        if pygame.sprite.collide_circle(self, orb):
-                            orb.action(self)
-                            self.move()
+                for orb in self.window.orbs:
+                    if pygame.sprite.collide_circle(self, orb):
+                        orb.action(self)
                 self.hold = True
             if key in (pygame.K_UP, pygame.K_SPACE, 1) and not value:
                 self.hold = False
@@ -57,6 +55,9 @@ class Character(Object):
             if pygame.sprite.spritecollideany(self, self.window.platforms):
                 self.rect = self.rect.move(-dir, 0)
                 self.event = 'restart'
+            for portal in self.window.portals:
+                if pygame.sprite.collide_rect(self, portal):
+                    portal.action(self)
 
 class Cube(Character):
     cube_image = 'cube.png'
@@ -97,4 +98,4 @@ class Ship(Character):
         super().__init__(group, pos, window, ('Color', 'black'))
 
     def jump(self):
-        self.Vy -= 0.5
+        self.Vy += 0.5 * sign(self.G)
