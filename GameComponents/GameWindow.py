@@ -5,6 +5,7 @@ from .Character import Cube, Ufo, Ball, Ship
 from .Object import Box, Ground, Wall
 from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb
 from .Portals import GravityPortal, ShipPortal, UfoPortal, BallPortal, CubePortal
+from .Portals import  SpeedPortal, Speed05xPortal, Speed15xPortal, UpPortal, DownPortal
 from .Camera import Camera
 from .LoadComponents import load_level
 
@@ -92,6 +93,12 @@ class GameWindow(Window):
             if item == 'Ufo portal':
                 for pos in value:
                     UfoPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'Speed1.5x':
+                for pos in value:
+                    Speed15xPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'Speed0.5x':
+                for pos in value:
+                    Speed05xPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
 
 class Game:
     def __init__(self):
