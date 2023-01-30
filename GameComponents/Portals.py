@@ -23,9 +23,15 @@ class ChangingCharacterPortal(Portal):
         player.window.player.Vy = player.Vy
         player.window.all_sprites.remove(player)
 
+    def top(self, player):
+        if player.window.top not in player.window.all_sprites:
+            player.window.all_sprites.add(player.window.top)
+            player.window.top.rect.x = player.window.ground.rect.x
+            player.window.top.rect.y = player.window.ground.rect.y - 750
+
 class GravityPortal(Portal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'cyan')
+        super().__init__(group, pos, '#FFFFE0')
 
     def action(self, player):
         if not self.active:
@@ -49,17 +55,18 @@ class DownPortal(GravityPortal):
 
 class ShipPortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'magenta')
+        super().__init__(group, pos, '#FF69B4')
 
     def action(self, player):
         if not self.active:
             player.window.player = Ship(player.window.all_sprites, (player.rect.x, player.rect.y), player.window)
             self.pick_sets(player)
+            self.top(player)
         self.active = True
 
 class CubePortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'green')
+        super().__init__(group, pos, 'yellow')
 
     def action(self, player):
         if not self.active:
@@ -69,45 +76,47 @@ class CubePortal(ChangingCharacterPortal):
 
 class BallPortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'magenta')
+        super().__init__(group, pos, 'red')
 
     def action(self, player):
         if not self.active:
             player.window.player = Ball(player.window.all_sprites, (player.rect.x, player.rect.y), player.window)
             self.pick_sets(player)
+            self.top(player)
         self.active = True
 
 class UfoPortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'magenta')
+        super().__init__(group, pos, 'green')
 
     def action(self, player):
         if not self.active:
             player.window.player = Ufo(player.window.all_sprites, (player.rect.x, player.rect.y), player.window)
             self.pick_sets(player)
+            self.top(player)
         self.active = True
 
 class SpeedPortal(Portal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'yellow')
+        super().__init__(group, pos, '#006400')
 
     def action(self, player):
         if not self.active:
             player.Vx = 4
         self.active = True
 
-class Speed15xPortal(Portal):
+class FastSpeedPortal(Portal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'yellow')
+        super().__init__(group, pos, '#FF4500')
 
     def action(self, player):
         if not self.active:
             player.Vx = 6
         self.active = True
 
-class Speed05xPortal(Portal):
+class SlowSpeedPortal(Portal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'yellow')
+        super().__init__(group, pos, '#20B2AA')
 
     def action(self, player):
         if not self.active:
