@@ -2,7 +2,8 @@ import pygame
 from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
 from .Button import RestartButton
 from .Character import Cube, Ufo, Ball, Ship
-from .Object import Box, Ground, Wall, JumpOrb, GravityOrb
+from .Object import Box, Ground, Wall
+from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb
 from .Camera import Camera
 from .LoadComponents import load_level
 
@@ -79,10 +80,10 @@ class GameWindow(Window):
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
             if item == 'Jump orb':
                 for pos in value:
-                    JumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+                    PushOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
             if item == 'Gravity orb':
                 for pos in value:
-                    GravityOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+                    ReverseOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
 
 class Game:
     def __init__(self):
