@@ -113,12 +113,3 @@ class Speed05xPortal(Portal):
         if not self.active:
             player.Vx = 2
         self.active = True
-
-'''class SizePortal(Portal):
-    def __init__(self, group, pos):
-        super().__init__(group, pos, 'yellow')
-
-    def action(self, player):
-        if not self.active:
-            player.Vx = 2
-        self.active = True'''
