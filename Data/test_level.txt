@@ -1,5 +1,5 @@
-Background / Color / cyan
+Background / Color / blue
 Map_size / 2000
 Player / 10, 60 / Cube
 Jump orb / 500, 100 / 800, 100
-Gravity orb / 1000, 100 / 1300, 100
+Gravity orb / 1000, 100 / 1250, 300
