@@ -73,7 +73,7 @@ class Ufo(Character):
     ufo_image = 'ufo.png'
 
     def __init__(self, group, pos, window):
-        super().__init__(group, pos, window, ('Color', 'black'))
+        super().__init__(group, pos, window, ('Color', 'green'))
 
     def jump(self):
         if not self.hold:
@@ -95,7 +95,7 @@ class Ship(Character):
     ship_image = 'ship.png'
 
     def __init__(self, group, pos, window):
-        super().__init__(group, pos, window, ('Color', 'black'))
+        super().__init__(group, pos, window, ('Color', '#FF69B4'))
 
     def jump(self):
         self.Vy += 0.5 * sign(self.G)

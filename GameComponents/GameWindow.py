@@ -2,10 +2,10 @@ import pygame
 from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
 from .Button import RestartButton
 from .Character import Cube, Ufo, Ball, Ship
-from .Object import Box, Ground, Wall
+from .Object import Box, Ground, WinZone
 from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb
 from .Portals import GravityPortal, ShipPortal, UfoPortal, BallPortal, CubePortal
-from .Portals import  SpeedPortal, Speed05xPortal, Speed15xPortal, UpPortal, DownPortal
+from .Portals import  SpeedPortal, FastSpeedPortal, SlowSpeedPortal, UpPortal, DownPortal
 from .Camera import Camera
 from .LoadComponents import load_level
 
@@ -65,40 +65,76 @@ class GameWindow(Window):
 
     def generate_level(self):
         self.size = self.level['Map_size']
-        Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
-        Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500), pos=(-500, -1000))
-        Wall([self.all_sprites, self.platforms], (self.size, -1000))
+        self.ground = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
+        self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 750))
+        WinZone([self.all_sprites, self.platforms], (self.size, -1000))
         for item, value in self.level.items():
             if item == 'Player':
                 if value[1] == 'Cube':
                     self.player = Cube(self.all_sprites, (value[0][0], -value[0][1]), self)
+                    self.all_sprites.remove(self.top)
                 if value[1] == 'Ball':
                     self.player = Ball(self.all_sprites, (value[0][0], -value[0][1]), self)
                 if value[1] == 'Ship':
                     self.player = Ship(self.all_sprites, (value[0][0], -value[0][1]), self)
                 if value[1] == 'Ufo':
                     self.player = Ufo(self.all_sprites, (value[0][0], -value[0][1]), self)
+            # Коробка
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
+            # Орбы
             if item == 'Jump orb':
                 for pos in value:
-                    PushOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+                    JumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
             if item == 'Gravity orb':
                 for pos in value:
+                    GravityOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+            if item == 'Small Jump orb':
+                for pos in value:
+                    SmallJumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+            if item == 'Reverse orb':
+                for pos in value:
                     ReverseOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+            if item == 'Big Jump orb':
+                for pos in value:
+                    BigJumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+            if item == 'Push orb':
+                for pos in value:
+                    PushOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+            # Гравитационные порталы
             if item == 'Gravity portal':
                 for pos in value:
                     GravityPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Ufo portal':
+            if item == 'Up portal':
+                for pos in value:
+                    UpPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'Down portal':
+                for pos in value:
+                    DownPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            # Порталы смены персонажа
+            if item == 'Ufo':
                 for pos in value:
                     UfoPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Speed1.5x':
+            if item == 'Cube':
                 for pos in value:
-                    Speed15xPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Speed0.5x':
+                    CubePortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'Ship':
                 for pos in value:
-                    Speed05xPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+                    ShipPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'Ball':
+                for pos in value:
+                    BallPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            # Порталы скорости
+            if item == 'SpeedFast':
+                for pos in value:
+                    FastSpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'SpeedSlow':
+                for pos in value:
+                    SlowSpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'SpeedNormal':
+                for pos in value:
+                    SpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
 
 class Game:
     def __init__(self):
