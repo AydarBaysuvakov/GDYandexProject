@@ -3,7 +3,7 @@ from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelC
 from .Button import RestartButton
 from .Character import Cube, Ufo, Ball, Ship
 from .Object import Box, Ground, WinZone
-from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb
+from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb, Jump, BigJump, GravJump, SmallJump
 from .Portals import GravityPortal, ShipPortal, UfoPortal, BallPortal, CubePortal
 from .Portals import  SpeedPortal, FastSpeedPortal, SlowSpeedPortal, UpPortal, DownPortal
 from .Camera import Camera
@@ -135,6 +135,19 @@ class GameWindow(Window):
             if item == 'SpeedNormal':
                 for pos in value:
                     SpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            # Jumppad
+            if item == 'Jump':
+                for pos in value:
+                    Jump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'SmallJump':
+                for pos in value:
+                    SmallJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'GravJump':
+                for pos in value:
+                    GravJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+            if item == 'BigJump':
+                for pos in value:
+                    BigJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
 
 class Game:
     def __init__(self):
