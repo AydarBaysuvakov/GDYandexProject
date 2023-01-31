@@ -76,3 +76,48 @@ class PushOrb(Orb):
         if not self.active:
             player.Vy = -10 * sign(player.G)
         self.active = True
+
+class Jumppad(Object):
+    def __init__(self, group, pos, color):
+        super().__init__(group[0], ('Color', color), (50, 50), take_size=True, form='circle', colorkey=-1)
+        self.add(group[1])
+        self.rect.top = pos[1]
+        self.rect.left = pos[0]
+        self.active = False
+
+class Jump(Jumppad):
+    def __init__(self, group, pos):
+        super().__init__(group, pos, 'yellow')
+
+    def action(self, player):
+        if not self.active:
+            player.Vy = 7 * sign(player.G)
+        self.active = True
+
+class SmallJump(Jumppad):
+    def __init__(self, group, pos):
+        super().__init__(group, pos, 'magenta')
+
+    def action(self, player):
+        if not self.active:
+            player.Vy = 6 * sign(player.G)
+        self.active = True
+
+class GravJump(Jumppad):
+    def __init__(self, group, pos):
+        super().__init__(group, pos, 'cyan')
+
+    def action(self, player):
+        if not self.active:
+            player.Vy = 3 * sign(player.G)
+            player.G *= -1
+        self.active = True
+
+class BigJump(Jumppad):
+    def __init__(self, group, pos):
+        super().__init__(group, pos, 'red')
+
+    def action(self, player):
+        if not self.active:
+            player.Vy = 9 * sign(player.G)
+        self.active = True
