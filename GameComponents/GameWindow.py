@@ -2,7 +2,7 @@ import pygame
 from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
 from .Button import RestartButton
 from .Character import Cube, Ufo, Ball, Ship
-from .Object import Box, Ground, WinZone
+from .Object import Box, Ground, WinZone, Spike
 from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb, Jump, BigJump, GravJump, SmallJump
 from .Portals import GravityPortal, ShipPortal, UfoPortal, BallPortal, CubePortal
 from .Portals import  SpeedPortal, FastSpeedPortal, SlowSpeedPortal, UpPortal, DownPortal
@@ -23,6 +23,7 @@ class GameWindow(Window):
         self.platforms = pygame.sprite.Group()
         self.orbs = pygame.sprite.Group()
         self.portals = pygame.sprite.Group()
+        self.spikes = pygame.sprite.Group()
         self.camera = Camera()
         self.generate_level()
 
@@ -66,7 +67,7 @@ class GameWindow(Window):
     def generate_level(self):
         self.size = self.level['Map_size']
         self.ground = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
-        self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 750))
+        self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 700))
         WinZone([self.all_sprites, self.platforms], (self.size, -1000))
         for item, value in self.level.items():
             if item == 'Player':
@@ -83,6 +84,10 @@ class GameWindow(Window):
             if item == 'Box':
                 for pos in value:
                     Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
+            # Шипы
+            if item == 'Spike':
+                for pos in value:
+                    Spike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
             # Орбы
             if item == 'Jump orb':
                 for pos in value:

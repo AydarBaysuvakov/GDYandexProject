@@ -10,7 +10,7 @@ def sign(x):
 
 class Portal(Object):
     def __init__(self, group, pos, color):
-        super().__init__(group[0], ('Color', color), (50, 150), take_size=True, colorkey=-1)
+        super().__init__(group[0], ('Color', color), (30, 120), take_size=True, colorkey=-1)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
@@ -27,7 +27,7 @@ class ChangingCharacterPortal(Portal):
         if player.window.top not in player.window.all_sprites:
             player.window.all_sprites.add(player.window.top)
             player.window.top.rect.x = player.window.ground.rect.x
-            player.window.top.rect.y = player.window.ground.rect.y - 750
+            player.window.top.rect.y = player.window.ground.rect.y - 700
 
 class GravityPortal(Portal):
     def __init__(self, group, pos):

@@ -3,7 +3,7 @@ import sys
 from .LoadComponents import load_image
 from .Button import RedButton, ReturnButton
 
-FPS = 55
+FPS = 60
 TITLE = 'Geometry dash'
 SIZE = WIDTH, HEIGHT = 800, 500
 

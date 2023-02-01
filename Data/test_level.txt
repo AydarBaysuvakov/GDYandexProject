@@ -3,7 +3,6 @@ Map_size / 5000
 Player / 10, 60 / Cube
 Jump orb / 500, 100 / 800, 100
 Gravity orb / 1000, 100 / 1250, 300
-Ship / 550, 150
-BigJump / 600, 15
+Jump / 600, 15
 SmallJump / 900, 15
-GravJump / 1200, 15
+Spike / 1500, 30

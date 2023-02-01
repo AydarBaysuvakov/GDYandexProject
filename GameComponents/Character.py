@@ -9,13 +9,13 @@ def sign(x):
     return 0
 
 class Character(Object):
-    G = -0.25
+    G = -0.225
     Vx, Vy = 4, 0
     event = None
     hold = False
 
     def __init__(self, group, pos, window, image_name=None, form='rect'):
-        super().__init__(group, image_name, size=[50, 50], take_size=True, colorkey=-1, form=form)
+        super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=-1, form=form)
         self.rect.left, self.rect.top = pos
         self.window = window
 
@@ -42,6 +42,9 @@ class Character(Object):
         dir, mod = sign(self.Vy), int(abs(self.Vy))
         for i in range(mod):
             self.rect = self.rect.move(0, dir)
+            if pygame.sprite.spritecollideany(self, self.window.spikes):
+                self.rect = self.rect.move(0, -dir)
+                self.event = 'restart'
             if pygame.sprite.spritecollideany(self, self.window.platforms):
                 self.rect = self.rect.move(0, -dir)
                 self.Vy = 0
@@ -53,6 +56,9 @@ class Character(Object):
         for i in range(mod):
             self.rect = self.rect.move(dir, 0)
             if pygame.sprite.spritecollideany(self, self.window.platforms):
+                self.rect = self.rect.move(-dir, 0)
+                self.event = 'restart'
+            if pygame.sprite.spritecollideany(self, self.window.spikes):
                 self.rect = self.rect.move(-dir, 0)
                 self.event = 'restart'
             for portal in self.window.portals:
@@ -67,7 +73,7 @@ class Cube(Character):
 
     def jump(self):
         if pygame.sprite.spritecollideany(self, self.window.platforms):
-            self.Vy = 7 * sign(self.G)
+            self.Vy = 6 * sign(self.G)
 
 class Ufo(Character):
     ufo_image = 'ufo.png'
@@ -77,7 +83,7 @@ class Ufo(Character):
 
     def jump(self):
         if not self.hold:
-            self.Vy = 7 * sign(self.G)
+            self.Vy = 6 * sign(self.G)
 
 class Ball(Character):
     ball_image = 'ball.png'

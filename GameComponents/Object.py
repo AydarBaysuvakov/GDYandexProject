@@ -39,7 +39,7 @@ class Platform(pygame.sprite.Sprite):
 
 class Box(Object):
     def __init__(self, group, pos):
-        super().__init__(group[0], ('Image', 'box.png'))
+        super().__init__(group[0], ('Image', 'box.png'), size=[40, 40], take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
@@ -54,6 +54,13 @@ class Ground(Object):
 class WinZone(Object):
     def __init__(self, group, pos=(1500, -1000), size=(500, 1500)):
         super().__init__(group[0], ('Image', 'sandCenter.png'), size, take_size=True)
+        self.add(group[1])
+        self.rect.top = pos[1]
+        self.rect.left = pos[0]
+
+class Spike(Object):
+    def __init__(self, group, pos):
+        super().__init__(group[0], ('Image', 'spike.png'), size=[40, 40], take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
