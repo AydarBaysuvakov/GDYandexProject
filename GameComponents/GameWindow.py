@@ -71,15 +71,15 @@ class GameWindow(Window):
         WinZone([self.all_sprites, self.platforms], (self.size, -1000))
         for item, value in self.level.items():
             if item == 'Player':
-                if value[1] == 'Cube':
-                    self.player = Cube(self.all_sprites, (value[0][0], -value[0][1]), self)
+                if value['mode'] == 'Cube':
+                    self.player = Cube(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
                     self.all_sprites.remove(self.top)
-                if value[1] == 'Ball':
-                    self.player = Ball(self.all_sprites, (value[0][0], -value[0][1]), self)
-                if value[1] == 'Ship':
-                    self.player = Ship(self.all_sprites, (value[0][0], -value[0][1]), self)
-                if value[1] == 'Ufo':
-                    self.player = Ufo(self.all_sprites, (value[0][0], -value[0][1]), self)
+                if value['mode'] == 'Ball':
+                    self.player = Ball(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
+                if value['mode'] == 'Ship':
+                    self.player = Ship(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
+                if value['mode'] == 'Ufo':
+                    self.player = Ufo(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
             # Коробка
             if item == 'Box':
                 for pos in value:
@@ -161,7 +161,7 @@ class Game:
         self.StartWindow = StartScreen(self.screen)
         self.setting = Settings(self.screen)
         self.skin = Skins(self.screen)
-        self.Levels = LevelChoise(self.screen, 'Level_list.txt')
+        self.Levels = LevelChoise(self.screen)
 
     def start(self):
         running = True
@@ -170,11 +170,11 @@ class Game:
             if last_event == "Выбрать уровень":
                 last_event = self.Levels.show()
                 if last_event != 'back':
-                    self.Gamewindow = GameWindow(self.screen, load_level(self.Levels.levels[last_event]))
+                    self.Gamewindow = GameWindow(self.screen, load_level()[last_event])
                     last_event = self.Gamewindow.show()
             elif last_event == "Персонаж":
                 self.skin.show()
-            elif last_event == "Настройки":
+            elif last_event == "Редактор":
                 self.setting.show()
             while last_event == 'restart':
                 self.Gamewindow.new_level()

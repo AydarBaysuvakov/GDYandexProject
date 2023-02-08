@@ -1,4 +1,4 @@
-from GameComponents.GameWindow import Game
+from GameComponents import Game
 
 if __name__ == '__main__':
     game = Game()

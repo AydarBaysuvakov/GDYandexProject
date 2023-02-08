@@ -1,5 +1,0 @@
-Test level:test_level.txt
-Cube:cube.txt
-Ship:ship.txt
-Ball:ball.txt
-Ufo:ufo.txt

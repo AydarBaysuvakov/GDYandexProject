@@ -1,4 +1,0 @@
-Background / Image / Batyr.jpg
-Map_size / 2000
-Player / 10, 60 / Cube
-Box / 600, 40 / 800, 40 / 800, 80 / 1000, 40 / 1000, 80 / 1000, 120

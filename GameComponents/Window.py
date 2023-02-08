@@ -1,7 +1,7 @@
 import pygame
 import sys
 import json
-from .LoadComponents import load_image
+from .LoadComponents import load_image, load_level
 from .Button import RedButton, ReturnButton, ChrButton
 
 FPS = 60
@@ -69,7 +69,7 @@ class StartScreen(Window):
     intro_text = ["Geometry dash", ' ']
     Button_text = ["Выбрать уровень",
                    "Персонаж",
-                   "Настройки"]
+                   "Редактор"]
     text_coord_top = 50
     text_coord_left = 300
     font = pygame.font.Font(None, 30)
@@ -105,12 +105,12 @@ class LevelChoise(Window):
     text_coord_left = 300
     font = pygame.font.Font(None, 30)
 
-    def __init__(self, screen, file):
+    def __init__(self, screen):
         super().__init__(screen, background_fn=('Image', 'fon.jpg'))
         self.Lable = self.make_lines(self.intro_text)
-        self.levels = self.get_level_list(file)
+        self.levels = self.get_level_list()
         self.buttons = pygame.sprite.Group()
-        self.make_buttons(self.buttons, self.levels.keys(),
+        self.make_buttons(self.buttons, self.levels,
                           (self.text_coord_left, self.text_coord_top + self.Lable.get_size()[1]))
         self.backbtn = self.back_button(self.buttons)
 
@@ -132,13 +132,8 @@ class LevelChoise(Window):
             clock.tick(FPS)
         pygame.quit()
 
-    def get_level_list(self, filename):
-        filename = "Data/" + filename
-        levels = {}
-        with open(filename, 'r') as levelsFile:
-            for i in levelsFile.readlines():
-                name, file = i.rstrip().split(':')
-                levels[name] = file
+    def get_level_list(self):
+        levels = load_level().keys()
         return levels
 
 class Settings(Window):

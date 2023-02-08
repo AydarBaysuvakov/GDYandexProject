@@ -77,7 +77,7 @@ class Cube(Character):
 
 class Ufo(Character):
     def __init__(self, group, pos, window):
-        self.ufo_image = json.load(open('Data/ufos.json'))['cubes']['curent']
+        self.ufo_image = json.load(open('Data/skins.json'))['ufos']['curent']
         super().__init__(group, pos, window, ('Color', 'green'))
 
     def jump(self):
@@ -98,7 +98,7 @@ class Ball(Character):
 
 class Ship(Character):
     def __init__(self, group, pos, window):
-        self.ship_image = json.load(open('Data/ships.json'))['cubes']['curent']
+        self.ship_image = json.load(open('Data/skins.json'))['ships']['curent']
         super().__init__(group, pos, window, ('Color', '#FF69B4'))
 
     def jump(self):

@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import json
 
 pygame.init()
 screen = pygame.display.set_mode((800, 500))
@@ -22,18 +23,6 @@ def load_image(name, colorkey=None):
         image = image.convert_alpha()
     return image
 
-def load_level(filename):
-    filename = "Data/" + filename
-    level = {}
-    with open(filename, 'r') as mapFile:
-        level['Background'] = mapFile.readline().rstrip().split(' / ')[1:]
-        for line in mapFile.readlines():
-            objects = line.rstrip().split(' / ')
-            object_type, params = objects[0], objects[1:]
-            if object_type == 'Map_size':
-                level['Map_size'] = int(*params)
-            elif object_type == 'Player':
-                level['Player'] = list(map(int, params[0].split(', '))), params[1]
-            else:
-                level[object_type] = [[int(i) for i in p.split(', ')] for p in params]
-    return level
+def load_level():
+    with open('Data/levels.json') as level_file:
+        return json.load(level_file)
