@@ -39,14 +39,14 @@ class Platform(pygame.sprite.Sprite):
 
 class Box(Object):
     def __init__(self, group, pos):
-        super().__init__(group[0], ('Image', 'box.png'), size=[40, 40], take_size=True)
+        super().__init__(group[0], ('Image', 'Abdrahman.jpg'), size=[40, 40], take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
 
 class Ground(Object):
     def __init__(self, group, pos=(-500, 0), size=(2000, 500)):
-        super().__init__(group[0], ('Image', 'grassMid.png'), size, take_size=True)
+        super().__init__(group[0], ('Image', 'floor.jpg'), size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
