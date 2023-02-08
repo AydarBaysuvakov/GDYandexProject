@@ -1,3 +1,4 @@
+import json
 import pygame
 from .Object import Object
 
@@ -15,7 +16,7 @@ class Character(Object):
     hold = False
 
     def __init__(self, group, pos, window, image_name=None, form='rect'):
-        super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=-1, form=form)
+        super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=pygame.color.Color('white'), form=form)
         self.rect.left, self.rect.top = pos
         self.window = window
 
@@ -66,19 +67,17 @@ class Character(Object):
                     portal.action(self)
 
 class Cube(Character):
-    cube_image = 'cube.png'
-
     def __init__(self, group, pos, window):
-        super().__init__(group, pos, window,('Color', 'yellow'))
+        self.cube_image = json.load(open('Data/skins.json'))['cubes']['curent']
+        super().__init__(group, pos, window,('Image', self.cube_image))
 
     def jump(self):
         if pygame.sprite.spritecollideany(self, self.window.platforms):
             self.Vy = 6 * sign(self.G)
 
 class Ufo(Character):
-    ufo_image = 'ufo.png'
-
     def __init__(self, group, pos, window):
+        self.ufo_image = json.load(open('Data/ufos.json'))['cubes']['curent']
         super().__init__(group, pos, window, ('Color', 'green'))
 
     def jump(self):
@@ -86,10 +85,10 @@ class Ufo(Character):
             self.Vy = 6 * sign(self.G)
 
 class Ball(Character):
-    ball_image = 'ball.png'
     G = -0.4
 
     def __init__(self, group, pos, window):
+        self.ball_image = json.load(open('Data/skins.json'))['balls']['curent']
         super().__init__(group, pos, window, ('Color', 'red'), form='circle')
 
     def jump(self):
@@ -98,9 +97,8 @@ class Ball(Character):
             self.rect = self.rect.move(0, -sign(self.G) * 2)
 
 class Ship(Character):
-    ship_image = 'ship.png'
-
     def __init__(self, group, pos, window):
+        self.ship_image = json.load(open('Data/ships.json'))['cubes']['curent']
         super().__init__(group, pos, window, ('Color', '#FF69B4'))
 
     def jump(self):

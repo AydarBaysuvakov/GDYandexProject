@@ -1,7 +1,8 @@
 import pygame
 import sys
+import json
 from .LoadComponents import load_image
-from .Button import RedButton, ReturnButton
+from .Button import RedButton, ReturnButton, ChrButton
 
 FPS = 60
 TITLE = 'Geometry dash'
@@ -170,9 +171,11 @@ class Settings(Window):
         pygame.quit()
 
 class Skins(Window):
-    intro_text = ["Soon"]
+    intro_text = ["Выберите персонажа"]
     text_coord_top = 50
-    text_coord_left = 380
+    text_coord_left = 340
+    btn_top = 250
+    btn_left = 100
     font = pygame.font.Font(None, 30)
 
     def __init__(self, screen):
@@ -180,6 +183,10 @@ class Skins(Window):
         self.Lable = self.make_lines(self.intro_text)
         self.buttons = pygame.sprite.Group()
         self.backbtn = self.back_button(self.buttons)
+        self.get_skins()
+        self.mode = 'cube'
+        self.make_buttons(self.buttons, 'cubes', (self.btn_left, self.btn_top))
+
 
     def show(self):
         clock = pygame.time.Clock()
@@ -188,12 +195,52 @@ class Skins(Window):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
-                last_pressed_button = self.backbtn.update(event)
-                if last_pressed_button:
-                    return last_pressed_button
+                for button in self.buttons:
+                    last_event = button.update(event)
+                    if last_event == 'back':
+                        return last_event
+                    if last_event:
+                        if last_event.startswith('-'):
+                            self.change_mode(last_event[1:].split('.')[0])
+                        else:
+                            self.change_skin(last_event)
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
             self.buttons.draw(self.screen)
             pygame.display.flip()
             clock.tick(FPS)
         pygame.quit()
+
+    def make_buttons(self, group, text, pos):
+        right = 0
+        for key, value in self.skins.items():
+            ChrButton(group, value['curent'], (pos[0] + right + 50, pos[1] - 70), '-' + value['curent'])
+            right += 60
+        right = 0
+        other = self.skins[text]['others']
+        for line in other:
+            ChrButton(group, line, (pos[0] + right, pos[1]), line)
+            right += 60
+
+    def get_skins(self):
+        with open('Data/skins.json') as skin_file:
+            self.skins = json.load(skin_file)
+
+    def change_skin(self, skin):
+        self.skins[self.mode + 's']['curent'] = skin
+        with open('Data/skins.json', 'w') as skin_file:
+            json.dump(self.skins, skin_file)
+            skin_file.close()
+        self.buttons.empty()
+        self.backbtn = self.back_button(self.buttons)
+        self.get_skins()
+        self.make_buttons(self.buttons, self.mode + 's', (self.btn_left, self.btn_top))
+
+    def change_mode(self, mode):
+        self.mode = mode
+        if mode.startswith('c'):
+            self.mode = mode[:-1]
+        self.buttons.empty()
+        self.backbtn = self.back_button(self.buttons)
+        self.get_skins()
+        self.make_buttons(self.buttons, self.mode + 's', (self.btn_left, self.btn_top))
