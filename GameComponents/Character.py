@@ -1,3 +1,4 @@
+import json
 import pygame
 from .Object import Object
 
@@ -15,7 +16,7 @@ class Character(Object):
     hold = False
 
     def __init__(self, group, pos, window, image_name=None, form='rect'):
-        super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=-1, form=form)
+        super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=pygame.color.Color('white'), form=form)
         self.rect.left, self.rect.top = pos
         self.window = window
 
@@ -66,10 +67,9 @@ class Character(Object):
                     portal.action(self)
 
 class Cube(Character):
-    cube_image = 'cube.png'
-
     def __init__(self, group, pos, window):
-        super().__init__(group, pos, window,('Color', 'yellow'))
+        self.cube_image = json.load(open('Data/skins.json'))['cubes']['curent']
+        super().__init__(group, pos, window,('Image', self.cube_image))
 
     def jump(self):
         if pygame.sprite.spritecollideany(self, self.window.platforms):
