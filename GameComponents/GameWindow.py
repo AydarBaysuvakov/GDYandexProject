@@ -8,6 +8,7 @@ from .Portals import GravityPortal, ShipPortal, UfoPortal, BallPortal, CubePorta
 from .Portals import  SpeedPortal, FastSpeedPortal, SlowSpeedPortal, UpPortal, DownPortal
 from .Camera import Camera
 from .LoadComponents import load_level
+from .Music import Music
 
 class GameWindow(Window):
     def __init__(self, screen, level):
@@ -162,14 +163,17 @@ class Game:
         self.setting = Settings(self.screen)
         self.skin = Skins(self.screen)
         self.Levels = LevelChoise(self.screen)
+        self.music = Music('Data/MusOMSK.mp3')
 
     def start(self):
         running = True
         while running:
+            self.music.stop()
             last_event = self.StartWindow.show()
             if last_event == "Выбрать уровень":
                 last_event = self.Levels.show()
                 if last_event != 'back':
+                    self.music.play()
                     self.Gamewindow = GameWindow(self.screen, load_level()[last_event])
                     last_event = self.Gamewindow.show()
             elif last_event == "Персонаж":
@@ -177,5 +181,6 @@ class Game:
             elif last_event == "Редактор":
                 self.setting.show()
             while last_event == 'restart':
+                self.music.restart()
                 self.Gamewindow.new_level()
                 last_event = self.Gamewindow.show()

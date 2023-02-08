@@ -1,1 +1,1 @@
-{"cubes": {"curent": "cube1.png", "others": ["cube1.png", "cube2.png", "cube3.png", "cube4.png", "cube5.png"]}, "ships": {"curent": "ship.png", "others": ["ship.png"]}, "balls": {"curent": "ball.png", "others": ["ball.png"]}, "ufos": {"curent": "ufo.png", "others": ["ufo.png"]}}
+{"cubes": {"curent": "cube3.png", "others": ["cube1.png", "cube2.png", "cube3.png", "cube4.png", "cube5.png"]}, "ships": {"curent": "ship.png", "others": ["ship.png"]}, "balls": {"curent": "ball.png", "others": ["ball.png"]}, "ufos": {"curent": "ufo.png", "others": ["ufo.png"]}}
