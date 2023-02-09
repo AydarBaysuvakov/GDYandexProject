@@ -1,5 +1,4 @@
-from .Object import Object
-from .Character import Ship, Cube, Ball, Ufo
+from .Character import *
 
 def sign(x):
     if x > 0:
@@ -97,28 +96,21 @@ class UfoPortal(ChangingCharacterPortal):
         self.active = True
 
 class SpeedPortal(Portal):
-    def __init__(self, group, pos):
-        super().__init__(group, pos, '#006400')
+    SPEED = 4
+    def __init__(self, group, pos, color='#006400'):
+        super().__init__(group, pos, color)
 
     def action(self, player):
         if not self.active:
-            player.Vx = 4
+            player.Vx = self.SPEED
         self.active = True
 
-class FastSpeedPortal(Portal):
+class FastSpeedPortal(SpeedPortal):
+    SPEED = 8
     def __init__(self, group, pos):
         super().__init__(group, pos, '#FF4500')
 
-    def action(self, player):
-        if not self.active:
-            player.Vx = 6
-        self.active = True
-
-class SlowSpeedPortal(Portal):
+class SlowSpeedPortal(SpeedPortal):
+    SPEED = 2
     def __init__(self, group, pos):
         super().__init__(group, pos, '#20B2AA')
-
-    def action(self, player):
-        if not self.active:
-            player.Vx = 2
-        self.active = True

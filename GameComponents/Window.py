@@ -3,6 +3,7 @@ import sys
 import json
 from .LoadComponents import load_image, load_level
 from .Button import RedButton, ReturnButton, ChrButton
+from .Other import Music
 
 FPS = 60
 TITLE = 'Geometry dash'
@@ -13,7 +14,11 @@ def terminate():
     sys.exit()
 
 class Window:
-    def __init__(self, screen, size=SIZE, background_fn=None, coords=(0, 0)):
+    def __init__(self, screen, size=SIZE, background_fn=None, coords=(0, 0), music=('Theme.mp3', 0)):
+        self.set_screen(screen, size, background_fn, coords)
+        self.set_music(*music)
+
+    def set_screen(self, screen, size=SIZE, background_fn=None, coords=(0, 0)):
         self.screen = screen
         if background_fn is None:
             self.background = pygame.Surface(self.screen.get_size())
@@ -26,6 +31,9 @@ class Window:
             self.background = pygame.Surface(self.screen.get_size())
             self.background.fill(pygame.color.Color(background_fn[1]))
         self.screen.blit(self.background, coords)
+
+    def set_music(self, file, start=0):
+        self.music = Music(file, start)
 
     def make_lines(self, text):
         size = self.font.render(max(text, key=len), 1, pygame.Color('white')).get_rect()
@@ -85,6 +93,8 @@ class StartScreen(Window):
         clock = pygame.time.Clock()
         running = True
         while running:
+            if self.music.stoped_or_ended():
+                self.music.restart()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
@@ -118,6 +128,8 @@ class LevelChoise(Window):
         clock = pygame.time.Clock()
         running = True
         while running:
+            if self.music.stoped_or_ended():
+                self.music.restart()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
@@ -152,6 +164,8 @@ class Settings(Window):
         clock = pygame.time.Clock()
         running = True
         while running:
+            if self.music.stoped_or_ended():
+                self.music.restart()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
@@ -187,6 +201,8 @@ class Skins(Window):
         clock = pygame.time.Clock()
         running = True
         while running:
+            if self.music.stoped_or_ended():
+                self.music.restart()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     terminate()
@@ -232,9 +248,7 @@ class Skins(Window):
         self.make_buttons(self.buttons, self.mode + 's', (self.btn_left, self.btn_top))
 
     def change_mode(self, mode):
-        self.mode = mode
-        if mode.startswith('c'):
-            self.mode = mode[:-1]
+        self.mode = mode[:-1]
         self.buttons.empty()
         self.backbtn = self.back_button(self.buttons)
         self.get_skins()

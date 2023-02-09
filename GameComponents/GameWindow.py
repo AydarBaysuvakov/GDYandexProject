@@ -1,18 +1,14 @@
-import pygame
 from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
 from .Button import RestartButton
-from .Character import Cube, Ufo, Ball, Ship
-from .Object import Box, Ground, WinZone, Spike
-from .Orbs import JumpOrb, GravityOrb, SmallJumpOrb, BigJumpOrb, ReverseOrb, PushOrb, Jump, BigJump, GravJump, SmallJump
-from .Portals import GravityPortal, ShipPortal, UfoPortal, BallPortal, CubePortal
-from .Portals import  SpeedPortal, FastSpeedPortal, SlowSpeedPortal, UpPortal, DownPortal
-from .Camera import Camera
+from .Object import *
+from .Orbs import *
+from .Portals import  *
+from .Other import *
 from .LoadComponents import load_level
-from .Music import Music
 
 class GameWindow(Window):
     def __init__(self, screen, level):
-        super().__init__(screen, background_fn=level['Background'])
+        super().__init__(screen, background_fn=level['Background'], music=level['Music'])
         self.buttons = pygame.sprite.Group()
         self.backbtn = self.back_button(self.buttons)
         self.restart = RestartButton(self.buttons, (50, 8))
@@ -30,6 +26,7 @@ class GameWindow(Window):
 
     def show(self):
         clock = pygame.time.Clock()
+        self.music.play()
         running = True
         events = {}
         while running:
@@ -37,8 +34,10 @@ class GameWindow(Window):
                 if event.type == pygame.QUIT:
                     terminate()
                 if self.backbtn.update(event):
+                    self.music.stop()
                     return 'back'
                 if self.restart.update(event):
+                    self.music.restart()
                     return 'restart'
                 if event.type == pygame.KEYDOWN:
                     events[event.key] = True
@@ -66,94 +65,114 @@ class GameWindow(Window):
         pygame.quit()
 
     def generate_level(self):
+        # Размеры карты
         self.size = self.level['Map_size']
+        # Пол, потолок и стена
         self.ground = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
         self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 700))
         WinZone([self.all_sprites, self.platforms], (self.size, -1000))
-        for item, value in self.level.items():
-            if item == 'Player':
-                if value['mode'] == 'Cube':
-                    self.player = Cube(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
-                    self.all_sprites.remove(self.top)
-                if value['mode'] == 'Ball':
-                    self.player = Ball(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
-                if value['mode'] == 'Ship':
-                    self.player = Ship(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
-                if value['mode'] == 'Ufo':
-                    self.player = Ufo(self.all_sprites, (value['coords'][0], -value['coords'][1]), self)
-            # Коробка
-            if item == 'Box':
-                for pos in value:
-                    Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
-            # Шипы
-            if item == 'Spike':
-                for pos in value:
-                    Spike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
-            # Орбы
-            if item == 'Jump orb':
-                for pos in value:
-                    JumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
-            if item == 'Gravity orb':
-                for pos in value:
-                    GravityOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
-            if item == 'Small Jump orb':
-                for pos in value:
-                    SmallJumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
-            if item == 'Reverse orb':
-                for pos in value:
-                    ReverseOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
-            if item == 'Big Jump orb':
-                for pos in value:
-                    BigJumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
-            if item == 'Push orb':
-                for pos in value:
-                    PushOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
-            # Гравитационные порталы
-            if item == 'Gravity portal':
-                for pos in value:
-                    GravityPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Up portal':
-                for pos in value:
-                    UpPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Down portal':
-                for pos in value:
-                    DownPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            # Порталы смены персонажа
-            if item == 'Ufo':
-                for pos in value:
-                    UfoPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Cube':
-                for pos in value:
-                    CubePortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Ship':
-                for pos in value:
-                    ShipPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'Ball':
-                for pos in value:
-                    BallPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            # Порталы скорости
-            if item == 'SpeedFast':
-                for pos in value:
-                    FastSpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'SpeedSlow':
-                for pos in value:
-                    SlowSpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'SpeedNormal':
-                for pos in value:
-                    SpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            # Jumppad
-            if item == 'Jump':
-                for pos in value:
-                    Jump([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'SmallJump':
-                for pos in value:
-                    SmallJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'GravJump':
-                for pos in value:
-                    GravJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
-            if item == 'BigJump':
-                for pos in value:
-                    BigJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        # Игрок
+        self.Spawn_Player()
+        # Объекты
+        self.Spawn_Object()
+        self.Spawn_Orbs()
+        self.Spawn_Gravity_Portals()
+        self.Spawn_Character_Change_Portals()
+        self.Spawn_Speed_Portals()
+
+
+    def Spawn_Player(self):
+        if self.level['Player']['mode'] == 'Cube':
+            self.player = Cube(self.all_sprites, (self.level['Player']['coords'][0], -self.level['Player']['coords'][1]), self)
+            self.all_sprites.remove(self.top)
+        if self.level['Player']['mode'] == 'Ball':
+            self.player = Ball(self.all_sprites, (self.level['Player']['coords'][0], -self.level['Player']['coords'][1]), self)
+        if self.level['Player']['mode'] == 'Ship':
+            self.player = Ship(self.all_sprites, (self.level['Player']['coords'][0], -self.level['Player']['coords'][1]), self)
+        if self.level['Player']['mode'] == 'Ufo':
+            self.player = Ufo(self.all_sprites, (self.level['Player']['coords'][0], -self.level['Player']['coords'][1]), self)
+
+    def Spawn_Object(self):
+        if 'Box' in self.level:
+            for pos in self.level['Box']:
+                Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
+        if 'Spike' in self.level:
+            for pos in self.level['Spike']:
+                Spike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
+        if 'Coin' in self.level:
+            for pos in self.level['Coin']:
+                Coin([self.all_sprites, self.portals], (pos[0], -pos[1]))
+
+    def Spawn_Orbs(self):
+        if 'Jump Orb' in self.level:
+            for pos in self.level['Jump Orb']:
+                JumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+        if 'Gravity Orb' in self.level:
+            for pos in self.level['Gravity Orb']:
+                GravityOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+        if 'Small Jump Orb' in self.level:
+            for pos in self.level['Small Jump Orb']:
+                SmallJumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+        if 'Reverse Orb' in self.level:
+            for pos in self.level['Reverse Orb']:
+                ReverseOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+        if 'Big Jump Orb' in self.level:
+            for pos in self.level['Big Jump Orb']:
+                BigJumpOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+        if 'Push Orb' in self.level:
+            for pos in self.level['Push Orb']:
+                PushOrb([self.all_sprites, self.orbs], (pos[0], -pos[1]))
+
+    def Spawn_Gravity_Portals(self):
+        if 'Gravity portal' in self.level:
+            for pos in self.level['Gravity Portal']:
+                GravityPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'Up portal' in self.level:
+            for pos in self.level['Up Portal']:
+                UpPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'Down portal' in self.level:
+            for pos in self.level['Down Portal']:
+                DownPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+
+    def Spawn_Character_Change_Portals(self):
+        if 'Ufo' in self.level:
+            for pos in self.level['Ufo']:
+                UfoPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'Cube' in self.level:
+            for pos in self.level['Cube']:
+                CubePortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'Ship' in self.level:
+            for pos in self.level['Ship']:
+                ShipPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'Ball' in self.level:
+            for pos in self.level['Ball']:
+                BallPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+
+    def Spawn_Speed_Portals(self):
+        if 'SpeedFast' in self.level:
+            for pos in self.level['SpeedFast']:
+                FastSpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'SpeedSlow' in self.level:
+            for pos in self.level['SpeedSlow']:
+                SlowSpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'SpeedNormal' in self.level:
+            for pos in self.level['SpeedNormal']:
+                SpeedPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
+
+    def Spawn_Jumppads(self):
+        if 'Jump' in self.level:
+            for pos in self.level['Jump']:
+                Jump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'SmallJump' in self.level:
+            for pos in self.level['SmallJump']:
+                SmallJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'GravJump' in self.level:
+            for pos in self.level['GravJump']:
+                GravJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+        if 'BigJump' in self.level:
+            for pos in self.level['BigJump']:
+                BigJump([self.all_sprites, self.portals], (pos[0], -pos[1]))
+
 
 class Game:
     def __init__(self):
@@ -163,17 +182,14 @@ class Game:
         self.setting = Settings(self.screen)
         self.skin = Skins(self.screen)
         self.Levels = LevelChoise(self.screen)
-        self.music = Music('Data/MusOMSK.mp3')
 
     def start(self):
         running = True
         while running:
-            self.music.stop()
             last_event = self.StartWindow.show()
             if last_event == "Выбрать уровень":
                 last_event = self.Levels.show()
                 if last_event != 'back':
-                    self.music.play()
                     self.Gamewindow = GameWindow(self.screen, load_level()[last_event])
                     last_event = self.Gamewindow.show()
             elif last_event == "Персонаж":
@@ -181,6 +197,5 @@ class Game:
             elif last_event == "Редактор":
                 self.setting.show()
             while last_event == 'restart':
-                self.music.restart()
                 self.Gamewindow.new_level()
                 last_event = self.Gamewindow.show()

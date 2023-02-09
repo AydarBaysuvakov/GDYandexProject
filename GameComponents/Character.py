@@ -12,8 +12,10 @@ def sign(x):
 class Character(Object):
     G = -0.225
     Vx, Vy = 4, 0
+    JUMP_FORCE = 6
     event = None
     hold = False
+    coin = 0
 
     def __init__(self, group, pos, window, image_name=None, form='rect'):
         super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=pygame.color.Color('white'), form=form)
@@ -43,9 +45,10 @@ class Character(Object):
         dir, mod = sign(self.Vy), int(abs(self.Vy))
         for i in range(mod):
             self.rect = self.rect.move(0, dir)
-            if pygame.sprite.spritecollideany(self, self.window.spikes):
-                self.rect = self.rect.move(0, -dir)
-                self.event = 'restart'
+            for spike in self.window.spikes:
+                if pygame.sprite.collide_mask(self, spike):
+                    self.rect = self.rect.move(0, -dir)
+                    self.event = 'restart'
             if pygame.sprite.spritecollideany(self, self.window.platforms):
                 self.rect = self.rect.move(0, -dir)
                 self.Vy = 0
@@ -73,7 +76,7 @@ class Cube(Character):
 
     def jump(self):
         if pygame.sprite.spritecollideany(self, self.window.platforms):
-            self.Vy = 6 * sign(self.G)
+            self.Vy = self.JUMP_FORCE * sign(self.G)
 
 class Ufo(Character):
     def __init__(self, group, pos, window):
@@ -82,7 +85,7 @@ class Ufo(Character):
 
     def jump(self):
         if not self.hold:
-            self.Vy = 6 * sign(self.G)
+            self.Vy = self.JUMP_FORCE * sign(self.G)
 
 class Ball(Character):
     G = -0.4
@@ -97,9 +100,10 @@ class Ball(Character):
             self.rect = self.rect.move(0, -sign(self.G) * 2)
 
 class Ship(Character):
+    FLY_VELOCITY = 0.5
     def __init__(self, group, pos, window):
         self.ship_image = json.load(open('Data/skins.json'))['ships']['curent']
         super().__init__(group, pos, window, ('Color', '#FF69B4'))
 
     def jump(self):
-        self.Vy += 0.5 * sign(self.G)
+        self.Vy += self.FLY_VELOCITY * sign(self.G)

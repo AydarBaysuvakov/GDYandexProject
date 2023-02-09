@@ -25,9 +25,7 @@ class Object(pygame.sprite.Sprite):
         if take_size:
             self.rect.w = size[0]
             self.rect.h = size[1]
-
-    def update(self):
-        pass
+        self.mask = pygame.mask.from_surface(self.image)
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, group, pos):
@@ -64,3 +62,18 @@ class Spike(Object):
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
+
+class Coin(Object):
+    def __init__(self, group, pos):
+        super().__init__(group[0], ('Image', 'coin.png'), size=[40, 40], take_size=True)
+        self.SG = group
+        self.add(group[1])
+        self.rect.top = pos[1]
+        self.rect.left = pos[0]
+        self.active = False
+
+    def action(self, player):
+        if not self.active:
+            self.SG[0].remove(self)
+            self.SG[1].remove(self)
+        self.active = True

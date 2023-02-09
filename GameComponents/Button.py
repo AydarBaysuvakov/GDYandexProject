@@ -29,9 +29,6 @@ class Button(pygame.sprite.Sprite):
         self.intro_rect.x = 10
         self.image.blit(self.string_rendered, self.intro_rect)
 
-    def img_blit(self):
-        pass
-
 class RedButton(Button):
     btn_img = load_image("red_button_normal.png")
     btn_prsd_img = load_image("red_button_press.png")
