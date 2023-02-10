@@ -2,11 +2,17 @@ from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelC
 from .Button import RestartButton
 from .Object import *
 from .Orbs import *
-from .Portals import  *
+from .Portals import *
 from .Other import *
 from .LoadComponents import load_level
 
 class GameWindow(Window):
+    BackSound = pygame.mixer.Sound('Data/Back.mp3')
+    DeathSound = pygame.mixer.Sound('Data/Death.mp3')
+    CompleteSound = pygame.mixer.Sound('Data/LevelCompleted.mp3')
+    BackSound.set_volume(100)
+    DeathSound.set_volume(100)
+    CompleteSound.set_volume(100)
     def __init__(self, screen, level):
         super().__init__(screen, background_fn=level['Background'], music=level['Music'])
         self.buttons = pygame.sprite.Group()
@@ -35,6 +41,7 @@ class GameWindow(Window):
                     terminate()
                 if self.backbtn.update(event):
                     self.music.stop()
+                    self.BackSound.play()
                     return 'back'
                 if self.restart.update(event):
                     self.music.restart()
@@ -53,6 +60,7 @@ class GameWindow(Window):
                     events[event.button] = False
             self.player.get_event(events)
             if self.player.event == 'restart':
+                self.DeathSound.play()
                 return 'restart'
             self.screen.blit(self.background, (0, 0))
             self.all_sprites.draw(self.screen)

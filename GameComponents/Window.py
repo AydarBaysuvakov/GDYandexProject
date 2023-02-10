@@ -110,6 +110,8 @@ class StartScreen(Window):
         pygame.quit()
 
 class LevelChoise(Window):
+    StartSound = pygame.mixer.Sound('Data/Click.mp3')
+    StartSound.set_volume(100)
     intro_text = ["Выберите уровень", ' ']
     text_coord_top = 50
     text_coord_left = 300
@@ -136,6 +138,7 @@ class LevelChoise(Window):
                 for button in self.buttons:
                     last_event = button.update(event)
                     if last_event:
+                        self.StartSound.play()
                         return last_event
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))

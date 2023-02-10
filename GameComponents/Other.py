@@ -16,6 +16,7 @@ class Camera:
 
 class Music:
     def __init__(self, file=None, start=0):
+        pygame.mixer.music.set_volume(50)
         self.start = start
         self.file = 'Data/' + file
         pygame.mixer.music.load(self.file)
