@@ -37,7 +37,7 @@ class Platform(pygame.sprite.Sprite):
 
 class Box(Object):
     def __init__(self, group, pos):
-        super().__init__(group[0], ('Image', 'Abdrahman.jpg'), size=[40, 40], take_size=True)
+        super().__init__(group[0], ('Image', 'block.jpg'), size=[40, 40], take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
@@ -51,7 +51,7 @@ class Ground(Object):
 
 class WinZone(Object):
     def __init__(self, group, pos=(1500, -1000), size=(500, 1500)):
-        super().__init__(group[0], ('Image', 'sandCenter.png'), size, take_size=True)
+        super().__init__(group[0], ('Image', 'floor.jpg'), size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
@@ -64,8 +64,11 @@ class Spike(Object):
         self.rect.left = pos[0]
 
 class Coin(Object):
-    def __init__(self, group, pos):
-        super().__init__(group[0], ('Image', 'coin.png'), size=[40, 40], take_size=True)
+    def __init__(self, group, pos, collected=True):
+        if collected:
+            super().__init__(group[0], ('Image', 'coin.png'), size=[40, 40], take_size=True)
+        else:
+            super().__init__(group[0], ('Color', 'green'), size=[40, 40], take_size=True, form='circle')
         self.SG = group
         self.add(group[1])
         self.rect.top = pos[1]
@@ -76,4 +79,5 @@ class Coin(Object):
         if not self.active:
             self.SG[0].remove(self)
             self.SG[1].remove(self)
+            player.coin += 1
         self.active = True

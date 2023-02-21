@@ -1,4 +1,4 @@
-from .Window import Window, terminate, FPS, Skins, Settings, StartScreen, LevelChoise, SIZE, TITLE
+from .Window import *
 from .Button import RestartButton
 from .Object import *
 from .Orbs import *
@@ -13,13 +13,14 @@ class GameWindow(Window):
     BackSound.set_volume(100)
     DeathSound.set_volume(100)
     CompleteSound.set_volume(100)
-    def __init__(self, screen, level):
+    def __init__(self, screen, level, game):
         super().__init__(screen, background_fn=level['Background'], music=level['Music'])
         self.buttons = pygame.sprite.Group()
         self.backbtn = self.back_button(self.buttons)
         self.restart = RestartButton(self.buttons, (50, 8))
         self.level = level
         self.new_level()
+        self.game = game
 
     def new_level(self):
         self.all_sprites = pygame.sprite.Group()
@@ -29,6 +30,7 @@ class GameWindow(Window):
         self.spikes = pygame.sprite.Group()
         self.camera = Camera()
         self.generate_level()
+        self.set_music(self.music_name)
 
     def show(self):
         clock = pygame.time.Clock()
@@ -49,6 +51,7 @@ class GameWindow(Window):
                 if event.type == pygame.KEYDOWN:
                     events[event.key] = True
                     if event.key == pygame.K_ESCAPE:
+                        self.music.stop()
                         return 'back'
                     if event.key == pygame.K_KP_0:
                         return 'restart'
@@ -59,18 +62,26 @@ class GameWindow(Window):
                 if event.type == pygame.MOUSEBUTTONUP:
                     events[event.button] = False
             self.player.get_event(events)
+            if self.player.event == 'win':
+                self.CompleteSound.play()
+                last_event = self.game.Win.show(self.player.coin)
+                self.music.stop()
+                return last_event
             if self.player.event == 'restart':
                 self.DeathSound.play()
                 return 'restart'
-            self.screen.blit(self.background, (0, 0))
-            self.all_sprites.draw(self.screen)
-            self.camera.update(self.player)
-            for sprite in self.all_sprites:
-                self.camera.apply(sprite)
-            self.buttons.draw(self.screen)
+            self.draw()
             clock.tick(FPS)
-            pygame.display.flip()
         pygame.quit()
+
+    def draw(self):
+        self.screen.blit(self.background, (0, 0))
+        self.all_sprites.draw(self.screen)
+        self.camera.update(self.player)
+        for sprite in self.all_sprites:
+            self.camera.apply(sprite)
+        self.buttons.draw(self.screen)
+        pygame.display.flip()
 
     def generate_level(self):
         # Размеры карты
@@ -78,7 +89,7 @@ class GameWindow(Window):
         # Пол, потолок и стена
         self.ground = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
         self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 700))
-        WinZone([self.all_sprites, self.platforms], (self.size, -1000))
+        self.winzone = WinZone([self.all_sprites, self.platforms], (self.size, -1000))
         # Игрок
         self.Spawn_Player()
         # Объекты
@@ -99,6 +110,7 @@ class GameWindow(Window):
             self.player = Ship(self.all_sprites, (self.level['Player']['coords'][0], -self.level['Player']['coords'][1]), self)
         if self.level['Player']['mode'] == 'Ufo':
             self.player = Ufo(self.all_sprites, (self.level['Player']['coords'][0], -self.level['Player']['coords'][1]), self)
+        self.player.coin = 0
 
     def Spawn_Object(self):
         if 'Box' in self.level:
@@ -190,6 +202,7 @@ class Game:
         self.setting = Settings(self.screen)
         self.skin = Skins(self.screen)
         self.Levels = LevelChoise(self.screen)
+        self.Win = LevelWinWindow(self.screen)
 
     def start(self):
         running = True
@@ -198,7 +211,7 @@ class Game:
             if last_event == "Выбрать уровень":
                 last_event = self.Levels.show()
                 if last_event != 'back':
-                    self.Gamewindow = GameWindow(self.screen, load_level()[last_event])
+                    self.Gamewindow = GameWindow(self.screen, load_level()[last_event], self)
                     last_event = self.Gamewindow.show()
             elif last_event == "Персонаж":
                 self.skin.show()

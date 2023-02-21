@@ -2,8 +2,9 @@ import pygame
 import sys
 import json
 from .LoadComponents import load_image, load_level
-from .Button import RedButton, ReturnButton, ChrButton
+from .Button import RedButton, ReturnButton, ChrButton, RestartButton
 from .Other import Music
+from .Object import Coin
 
 FPS = 60
 TITLE = 'Geometry dash'
@@ -20,6 +21,8 @@ class Window:
 
     def set_screen(self, screen, size=SIZE, background_fn=None, coords=(0, 0)):
         self.screen = screen
+        self.coords = coords
+        self.size = size
         if background_fn is None:
             self.background = pygame.Surface(self.screen.get_size())
             self.background.fill(pygame.color.Color('cyan'))
@@ -34,6 +37,7 @@ class Window:
 
     def set_music(self, file, start=0):
         self.music = Music(file, start)
+        self.music_name = file
 
     def make_lines(self, text):
         size = self.font.render(max(text, key=len), 1, pygame.Color('white')).get_rect()
@@ -256,3 +260,58 @@ class Skins(Window):
         self.backbtn = self.back_button(self.buttons)
         self.get_skins()
         self.make_buttons(self.buttons, self.mode + 's', (self.btn_left, self.btn_top))
+
+class LevelWinWindow(Window):
+    intro_text = ["Вы прошли уровень"]
+    text_coord_top = 120
+    text_coord_left = 320
+    coin_top = 220
+    coin_left = 320
+    font = pygame.font.Font(None, 30)
+
+    def __init__(self, screen):
+        super().__init__(screen, (400, 300), ('Image', 'fon.jpg'), (200, 100))
+        self.buttons = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
+        self.backbtn = ReturnButton(self.buttons, (450, 300))
+        self.restart = RestartButton(self.buttons, (350, 300))
+
+    def show(self, coins):
+        self.Lable = self.make_lines(self.intro_text)
+        self.make_coins(coins)
+        clock = pygame.time.Clock()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    terminate()
+                if self.backbtn.update(event):
+                    self.music.stop()
+                    return 'back'
+                if self.restart.update(event):
+                    self.music.restart()
+                    return 'restart'
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.music.stop()
+                        return 'back'
+                    if event.key == pygame.K_KP_0:
+                        return 'restart'
+            self.screen.blit(self.background, self.coords)
+            self.screen.blit(self.Lable, (self.text_coord_left, self.text_coord_top))
+            self.buttons.draw(self.screen)
+            self.coins.draw(self.screen)
+            pygame.display.flip()
+            clock.tick(FPS)
+        pygame.quit()
+
+    def make_coins(self, coins):
+        for coin in self.coins:
+            self.coins.remove(coin)
+        self.coin_left = 320
+        for i in range(coins):
+            Coin((self.coins, self.coins), (self.coin_left, self.coin_top))
+            self.coin_left += 50
+        for i in range(3 - coins):
+            Coin((self.coins, self.coins), (self.coin_left, self.coin_top), collected=False)
+            self.coin_left += 50

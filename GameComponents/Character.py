@@ -59,10 +59,12 @@ class Character(Object):
         dir, mod = sign(self.Vx), int(abs(self.Vx))
         for i in range(mod):
             self.rect = self.rect.move(dir, 0)
-            if pygame.sprite.spritecollideany(self, self.window.platforms):
+            if pygame.sprite.collide_mask(self, self.window.winzone):
+                self.event = 'win'
+            elif pygame.sprite.spritecollideany(self, self.window.platforms):
                 self.rect = self.rect.move(-dir, 0)
                 self.event = 'restart'
-            if pygame.sprite.spritecollideany(self, self.window.spikes):
+            elif pygame.sprite.spritecollideany(self, self.window.spikes):
                 self.rect = self.rect.move(-dir, 0)
                 self.event = 'restart'
             for portal in self.window.portals:
