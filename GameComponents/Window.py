@@ -273,8 +273,8 @@ class LevelWinWindow(Window):
         super().__init__(screen, (400, 300), ('Image', 'fon.jpg'), (200, 100))
         self.buttons = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
-        self.backbtn = ReturnButton(self.buttons, (450, 300))
-        self.restart = RestartButton(self.buttons, (350, 300))
+        self.backbtn = RedButton(self.buttons, (220, 300), 'Завершить', (160, 50))
+        self.restart = RedButton(self.buttons, (400, 300), "Начать заново", (160, 50))
 
     def show(self, coins):
         self.Lable = self.make_lines(self.intro_text)

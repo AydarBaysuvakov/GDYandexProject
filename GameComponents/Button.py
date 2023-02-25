@@ -34,8 +34,9 @@ class RedButton(Button):
     btn_prsd_img = load_image("red_button_press.png")
     btn_hover_img = load_image("red_button_hover.png")
 
-    def __init__(self, group, coords=(0, 0), text=''):
-        super().__init__(group, self.btn_img, coords, text)
+    def __init__(self, group, coords=(0, 0), text='', size=None):
+        super().__init__(group, self.btn_img, coords, text, size=size)
+        self.size = size
         self.text_write()
 
     def update(self, *args):
@@ -53,6 +54,8 @@ class RedButton(Button):
             self.image = self.btn_hover_img.copy()
         else:
             self.image = self.btn_img.copy()
+        if self.size:
+            self.image = pygame.transform.scale(self.image, self.size)
         self.text_write()
 
 class ReturnButton(Button):
@@ -70,5 +73,5 @@ class ChrButton(Button):
         self.image = pygame.Surface(size)
         self.image.fill(pygame.color.Color(back_color))
         super().__init__(group, self.image, size=(50, 50), text=text, coords=coords)
-        self.skin = pygame.transform.scale(load_image(image, colorkey=pygame.color.Color('white')), (40, 40))
+        self.skin = pygame.transform.scale(load_image(image, colorkey=None), (40, 40))
         self.image.blit(self.skin, (5, 5))

@@ -18,7 +18,7 @@ class Character(Object):
     coin = 0
 
     def __init__(self, group, pos, window, image_name=None, form='rect'):
-        super().__init__(group, image_name, size=[40, 40], take_size=True, colorkey=pygame.color.Color('white'), form=form)
+        super().__init__(group, image_name, size=[40, 40], take_size=True, form=form)
         self.rect.left, self.rect.top = pos
         self.window = window
 
@@ -83,7 +83,7 @@ class Cube(Character):
 class Ufo(Character):
     def __init__(self, group, pos, window):
         self.ufo_image = json.load(open('Data/skins.json'))['ufos']['curent']
-        super().__init__(group, pos, window, ('Color', 'green'))
+        super().__init__(group, pos, window, ('Image', self.ufo_image))
 
     def jump(self):
         if not self.hold:
@@ -94,7 +94,7 @@ class Ball(Character):
 
     def __init__(self, group, pos, window):
         self.ball_image = json.load(open('Data/skins.json'))['balls']['curent']
-        super().__init__(group, pos, window, ('Color', 'red'), form='circle')
+        super().__init__(group, pos, window, ('Image', self.ball_image), form='circle')
 
     def jump(self):
         if pygame.sprite.spritecollideany(self, self.window.platforms):
@@ -105,7 +105,7 @@ class Ship(Character):
     FLY_VELOCITY = 0.5
     def __init__(self, group, pos, window):
         self.ship_image = json.load(open('Data/skins.json'))['ships']['curent']
-        super().__init__(group, pos, window, ('Color', '#FF69B4'))
+        super().__init__(group, pos, window, ('Image', self.ship_image))
 
     def jump(self):
         self.Vy += self.FLY_VELOCITY * sign(self.G)

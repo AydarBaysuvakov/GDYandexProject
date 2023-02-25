@@ -68,7 +68,7 @@ class Coin(Object):
         if collected:
             super().__init__(group[0], ('Image', 'coin.png'), size=[40, 40], take_size=True)
         else:
-            super().__init__(group[0], ('Color', 'green'), size=[40, 40], take_size=True, form='circle')
+            super().__init__(group[0], ('Color', 'blue'), size=[40, 40], take_size=True, form='circle')
         self.SG = group
         self.add(group[1])
         self.rect.top = pos[1]
