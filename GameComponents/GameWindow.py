@@ -98,6 +98,7 @@ class GameWindow(Window):
         self.Spawn_Gravity_Portals()
         self.Spawn_Character_Change_Portals()
         self.Spawn_Speed_Portals()
+        self.Spawn_Jumppads()
 
 
     def Spawn_Player(self):
@@ -145,13 +146,13 @@ class GameWindow(Window):
 
     def Spawn_Gravity_Portals(self):
         if 'Gravity portal' in self.level:
-            for pos in self.level['Gravity Portal']:
+            for pos in self.level['Gravity portal']:
                 GravityPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
         if 'Up portal' in self.level:
-            for pos in self.level['Up Portal']:
+            for pos in self.level['Up portal']:
                 UpPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
         if 'Down portal' in self.level:
-            for pos in self.level['Down Portal']:
+            for pos in self.level['Down portal']:
                 DownPortal([self.all_sprites, self.portals], (pos[0], -pos[1]))
 
     def Spawn_Character_Change_Portals(self):

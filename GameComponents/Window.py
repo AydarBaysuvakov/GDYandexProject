@@ -263,7 +263,7 @@ class Skins(Window):
 
 class LevelWinWindow(Window):
     intro_text = ["Вы прошли уровень"]
-    text_coord_top = 120
+    text_coord_top = 140
     text_coord_left = 320
     coin_top = 220
     coin_left = 320

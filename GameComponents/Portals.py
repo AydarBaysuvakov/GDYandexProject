@@ -8,8 +8,8 @@ def sign(x):
     return 0
 
 class Portal(Object):
-    def __init__(self, group, pos, color):
-        super().__init__(group[0], ('Color', color), (30, 120), take_size=True, colorkey=-1)
+    def __init__(self, group, pos, image_name, size=(40, 120)):
+        super().__init__(group[0], ('Image', image_name), size=size, take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]
@@ -29,8 +29,8 @@ class ChangingCharacterPortal(Portal):
             player.window.top.rect.y = player.window.ground.rect.y - 700
 
 class GravityPortal(Portal):
-    def __init__(self, group, pos):
-        super().__init__(group, pos, '#FFFFE0')
+    def __init__(self, group, pos, image_name='grav1.png'):
+        super().__init__(group, pos, image_name)
 
     def action(self, player):
         if not self.active:
@@ -39,6 +39,9 @@ class GravityPortal(Portal):
         self.active = True
 
 class UpPortal(GravityPortal):
+    def __init__(self, group, pos):
+        super().__init__(group, pos)
+
     def action(self, player):
         if not self.active:
             player.Vy = sign(player.G)
@@ -46,6 +49,9 @@ class UpPortal(GravityPortal):
         self.active = True
 
 class DownPortal(GravityPortal):
+    def __init__(self, group, pos):
+        super().__init__(group, pos, 'grav2.png')
+
     def action(self, player):
         if not self.active:
             player.Vy = sign(player.G)
@@ -54,7 +60,7 @@ class DownPortal(GravityPortal):
 
 class ShipPortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, '#FF69B4')
+        super().__init__(group, pos, 'shipportal.png')
 
     def action(self, player):
         if not self.active:
@@ -65,7 +71,7 @@ class ShipPortal(ChangingCharacterPortal):
 
 class CubePortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'yellow')
+        super().__init__(group, pos, 'cubeportal.png')
 
     def action(self, player):
         if not self.active:
@@ -75,7 +81,7 @@ class CubePortal(ChangingCharacterPortal):
 
 class BallPortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'red')
+        super().__init__(group, pos, 'ballportal.png')
 
     def action(self, player):
         if not self.active:
@@ -86,7 +92,7 @@ class BallPortal(ChangingCharacterPortal):
 
 class UfoPortal(ChangingCharacterPortal):
     def __init__(self, group, pos):
-        super().__init__(group, pos, 'green')
+        super().__init__(group, pos, 'ufoportal.png')
 
     def action(self, player):
         if not self.active:
@@ -97,8 +103,8 @@ class UfoPortal(ChangingCharacterPortal):
 
 class SpeedPortal(Portal):
     SPEED = 4
-    def __init__(self, group, pos, color='#006400'):
-        super().__init__(group, pos, color)
+    def __init__(self, group, pos, image_name='normal.png'):
+        super().__init__(group, pos, image_name, size=(60, 120))
 
     def action(self, player):
         if not self.active:
@@ -108,9 +114,9 @@ class SpeedPortal(Portal):
 class FastSpeedPortal(SpeedPortal):
     SPEED = 8
     def __init__(self, group, pos):
-        super().__init__(group, pos, '#FF4500')
+        super().__init__(group, pos, 'fast.png')
 
 class SlowSpeedPortal(SpeedPortal):
     SPEED = 2
     def __init__(self, group, pos):
-        super().__init__(group, pos, '#20B2AA')
+        super().__init__(group, pos, 'slow.png')
