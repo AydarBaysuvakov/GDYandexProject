@@ -74,7 +74,7 @@ class Character(Object):
     def reverse(self):
         self.image = self.image_orig
         if self.G > 0:
-            self.image = pygame.transform.rotate(self.image, 180)
+            self.image = pygame.transform.flip(self.image, flip_x=False, flip_y=True)
 
 class Cube(Character):
     def __init__(self, group, pos, window):
