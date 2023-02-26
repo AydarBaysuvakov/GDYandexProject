@@ -20,13 +20,14 @@ class ChangingCharacterPortal(Portal):
         player.window.player.G = player.G
         player.window.player.Vx = player.Vx
         player.window.player.Vy = player.Vy
+        player.window.player.coin = player.coin
         player.window.all_sprites.remove(player)
 
     def top(self, player):
         if player.window.top not in player.window.all_sprites:
             player.window.all_sprites.add(player.window.top)
             player.window.top.rect.x = player.window.ground.rect.x
-            player.window.top.rect.y = player.window.ground.rect.y - 700
+            player.window.top.rect.y = player.window.ground.rect.y - 720
 
 class GravityPortal(Portal):
     def __init__(self, group, pos, image_name='grav1.png'):
@@ -36,6 +37,7 @@ class GravityPortal(Portal):
         if not self.active:
             player.Vy = sign(player.G)
             player.G *= -1
+            player.reverse()
         self.active = True
 
 class UpPortal(GravityPortal):
@@ -46,6 +48,7 @@ class UpPortal(GravityPortal):
         if not self.active:
             player.Vy = sign(player.G)
             player.G = abs(player.G)
+            player.reverse()
         self.active = True
 
 class DownPortal(GravityPortal):
@@ -56,6 +59,7 @@ class DownPortal(GravityPortal):
         if not self.active:
             player.Vy = sign(player.G)
             player.G = -abs(player.G)
+            player.reverse()
         self.active = True
 
 class ShipPortal(ChangingCharacterPortal):

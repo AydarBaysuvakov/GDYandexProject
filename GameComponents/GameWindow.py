@@ -88,7 +88,7 @@ class GameWindow(Window):
         self.size = self.level['Map_size']
         # Пол, потолок и стена
         self.ground = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 500))
-        self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 700))
+        self.top = Ground([self.all_sprites, self.platforms], size=(self.size + 500, 400), pos=(self.ground.rect.x, self.ground.rect.y - 720))
         self.winzone = WinZone([self.all_sprites, self.platforms], (self.size, -1000))
         # Игрок
         self.Spawn_Player()
@@ -120,6 +120,9 @@ class GameWindow(Window):
         if 'Spike' in self.level:
             for pos in self.level['Spike']:
                 Spike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
+        if 'ReverseSpike' in self.level:
+            for pos in self.level['ReverseSpike']:
+                ReverseSpike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
         if 'Coin' in self.level:
             for pos in self.level['Coin']:
                 Coin([self.all_sprites, self.portals], (pos[0], -pos[1]))

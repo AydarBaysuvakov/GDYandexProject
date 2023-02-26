@@ -2,30 +2,34 @@ import pygame
 from .LoadComponents import load_image
 
 class Object(pygame.sprite.Sprite):
-    def __init__(self, group, image_name=None, size=(10, 10), take_size=False, colorkey=None, form='rect'):
+    def __init__(self, group, image_name=None, size=(10, 10), take_size=False, colorkey=None, form='rect', reverse=False):
         super().__init__(group)
-        if image_name is None:
-            self.image = pygame.Surface(size)
-            self.image.fill(pygame.color.Color('white'))
-        elif image_name[0] == 'Image':
-            self.image = load_image(image_name[1], colorkey=colorkey)
-            if take_size:
-                self.image = pygame.transform.scale(self.image, size)
-        elif image_name[0] == 'Animation':
-            self.image = load_image(image_name[1])
-        elif image_name[0] == 'Color':
-            self.image = pygame.Surface(size)
-            if form == 'circle':
-                pygame.draw.circle(self.image, pygame.Color(image_name[1]),
-                                   (size[0] // 2, size[1] // 2), size[0] // 2)
-                self.image.set_colorkey(pygame.color.Color('black'))
-            else:
-                self.image.fill(pygame.color.Color(image_name[1]))
+        self.loading_original_image(image_name, size, colorkey, form, take_size)
+        self.image = self.image_orig.copy()
         self.rect = self.image.get_rect()
         if take_size:
             self.rect.w = size[0]
             self.rect.h = size[1]
+        if reverse:
+            self.image = pygame.transform.rotate(self.image, 180)
         self.mask = pygame.mask.from_surface(self.image)
+
+    def loading_original_image(self, image_name, size, colorkey, form, take_size):
+        if image_name is None:
+            self.image_orig = pygame.Surface(size)
+            self.image_orig.fill(pygame.color.Color('white'))
+        elif image_name[0] == 'Image':
+            self.image_orig = load_image(image_name[1], colorkey=colorkey)
+            if take_size:
+                self.image_orig = pygame.transform.scale(self.image_orig, size)
+        elif image_name[0] == 'Color':
+            self.image_orig = pygame.Surface(size)
+            if form == 'circle':
+                pygame.draw.circle(self.image_orig, pygame.Color(image_name[1]),
+                                   (size[0] // 2, size[1] // 2), size[0] // 2)
+                self.image_orig.set_colorkey(pygame.color.Color('black'))
+            else:
+                self.image_orig.fill(pygame.color.Color(image_name[1]))
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, group, pos):
@@ -59,6 +63,13 @@ class WinZone(Object):
 class Spike(Object):
     def __init__(self, group, pos):
         super().__init__(group[0], ('Image', 'spike.png'), size=[40, 40], take_size=True)
+        self.add(group[1])
+        self.rect.top = pos[1]
+        self.rect.left = pos[0]
+
+class ReverseSpike(Object):
+    def __init__(self, group, pos):
+        super().__init__(group[0], ('Image', 'reversespike.png'), size=[40, 40], take_size=True)
         self.add(group[1])
         self.rect.top = pos[1]
         self.rect.left = pos[0]

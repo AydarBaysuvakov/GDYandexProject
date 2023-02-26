@@ -12,13 +12,13 @@ def sign(x):
 class Character(Object):
     G = -0.225
     Vx, Vy = 4, 0
-    JUMP_FORCE = 6
+    JUMP_FORCE = 5.8
     event = None
     hold = False
     coin = 0
 
-    def __init__(self, group, pos, window, image_name=None):
-        super().__init__(group, image_name, size=[40, 40], take_size=True)
+    def __init__(self, group, pos, window, image_name=None, reverse=False):
+        super().__init__(group, image_name, size=[40, 40], take_size=True, reverse=reverse)
         self.rect.left, self.rect.top = pos
         self.window = window
 
@@ -70,6 +70,11 @@ class Character(Object):
             for portal in self.window.portals:
                 if pygame.sprite.collide_rect(self, portal):
                     portal.action(self)
+
+    def reverse(self):
+        self.image = self.image_orig
+        if self.G > 0:
+            self.image = pygame.transform.rotate(self.image, 180)
 
 class Cube(Character):
     def __init__(self, group, pos, window):

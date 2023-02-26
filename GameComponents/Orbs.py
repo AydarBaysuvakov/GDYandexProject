@@ -38,6 +38,7 @@ class GravityOrb(Orb):
         if not self.active:
             player.Vy = self.JUMP_FORCE * sign(player.G)
             player.G *= -1
+            player.reverse()
         self.active = True
 
 class SmallJumpOrb(Orb):
@@ -61,6 +62,7 @@ class ReverseOrb(Orb):
         if not self.active:
             player.Vy = self.JUMP_FORCE * sign(player.G)
             player.G *= -1
+            player.reverse()
         self.active = True
 
 
@@ -102,6 +104,7 @@ class GravJump(Jumppad):
         if not self.active:
             player.Vy = self.JUMP_FORCE * sign(player.G)
             player.G *= -1
+            player.reverse()
         self.active = True
 
 class BigJump(Jumppad):
