@@ -48,7 +48,7 @@ class SmallJumpOrb(Orb):
 
 
 class BigJumpOrb(Orb):
-    JUMP_FORCE = 8
+    JUMP_FORCE = 9
     def __init__(self, group, pos):
         super().__init__(group, pos, 'orb3.png')
 

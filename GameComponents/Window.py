@@ -37,7 +37,7 @@ class Window:
 
     def set_music(self, file, start=0):
         self.music = Music(file, start)
-        self.music_name = file
+        self.music_name = [file, start]
 
     def make_lines(self, text):
         size = self.font.render(max(text, key=len), 1, pygame.Color('white')).get_rect()

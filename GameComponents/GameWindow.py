@@ -30,7 +30,7 @@ class GameWindow(Window):
         self.spikes = pygame.sprite.Group()
         self.camera = Camera()
         self.generate_level()
-        self.set_music(self.music_name)
+        self.set_music(*self.music_name)
 
     def show(self):
         clock = pygame.time.Clock()
