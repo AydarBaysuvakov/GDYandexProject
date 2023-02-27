@@ -93,11 +93,11 @@ class GameWindow(Window):
         # Игрок
         self.Spawn_Player()
         # Объекты
+        self.Spawn_Speed_Portals()
         self.Spawn_Object()
         self.Spawn_Orbs()
         self.Spawn_Gravity_Portals()
         self.Spawn_Character_Change_Portals()
-        self.Spawn_Speed_Portals()
         self.Spawn_Jumppads()
 
 
@@ -114,15 +114,21 @@ class GameWindow(Window):
         self.player.coin = 0
 
     def Spawn_Object(self):
-        if 'Box' in self.level:
-            for pos in self.level['Box']:
-                Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
         if 'Spike' in self.level:
             for pos in self.level['Spike']:
                 Spike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
         if 'ReverseSpike' in self.level:
             for pos in self.level['ReverseSpike']:
                 ReverseSpike([self.all_sprites, self.spikes], (pos[0], -pos[1]))
+        if 'FakeSpike' in self.level:
+            for pos in self.level['FakeSpike']:
+                FakeSpike([self.all_sprites, self.all_sprites], (pos[0], -pos[1]))
+        if 'Box' in self.level:
+            for pos in self.level['Box']:
+                Box([self.all_sprites, self.platforms], (pos[0], -pos[1]))
+        if 'FakeBox' in self.level:
+            for pos in self.level['FakeBox']:
+                FakeBox([self.all_sprites, self.all_sprites], (pos[0], -pos[1]))
         if 'Coin' in self.level:
             for pos in self.level['Coin']:
                 Coin([self.all_sprites, self.portals], (pos[0], -pos[1]))

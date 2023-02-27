@@ -108,7 +108,7 @@ class UfoPortal(ChangingCharacterPortal):
 class SpeedPortal(Portal):
     SPEED = 4
     def __init__(self, group, pos, image_name='normal.png'):
-        super().__init__(group, pos, image_name, size=(60, 120))
+        super().__init__(group, pos, image_name, size=(50, 100))
 
     def action(self, player):
         if not self.active:
@@ -116,7 +116,7 @@ class SpeedPortal(Portal):
         self.active = True
 
 class FastSpeedPortal(SpeedPortal):
-    SPEED = 8
+    SPEED = 7
     def __init__(self, group, pos):
         super().__init__(group, pos, 'fast.png')
 
